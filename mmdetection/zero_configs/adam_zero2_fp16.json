@@ -1,0 +1,23 @@
+{
+  "train_batch_size": 128,
+  "gradient_accumulation_steps": 1,
+  "optimizer": {
+    "type": "Adam",
+    "params": {
+      "lr": 0.00015
+    }
+  },
+  "fp16": {
+    "enabled": true,
+    "auto_cast": true
+  },
+  "zero_optimization": {
+    "stage": 2,
+    "contiguous_gradients": true,
+    "overlap_comm": true,
+    "reduce_scatter": true,
+    "reduce_bucket_size": 5e8,
+    "allgather_bucket_size": 5e8
+  },
+  "steps_per_print": 50
+}

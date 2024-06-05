@@ -1,0 +1,32 @@
+{
+  "train_batch_size": 128,
+  "gradient_accumulation_steps": 1,
+  "optimizer": {
+    "type": "AdamW",
+    "params": {
+      "lr": 0.0001
+    }
+  },
+  "fp16": {
+    "enabled": true,
+    "auto_cast": true,
+    "loss_scale": 0,
+    "initial_scale_power": 32,
+    "loss_scale_window": 1000,
+    "hysteresis": 2,
+    "min_loss_scale": 1
+  },
+  "zero_optimization": {
+    "stage": 1,
+    "allgather_partitions": true,
+    "allgather_bucket_size": 1e9,
+    "overlap_comm": true,
+    "reduce_scatter": true,
+    "reduce_bucket_size": 1e9,
+    "contiguous_gradients": true
+  },
+  "gradient_clipping": 1.0,
+  "log": {
+    "steps_per_print": 50
+  }
+}
