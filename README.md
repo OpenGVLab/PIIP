@@ -2,7 +2,7 @@
 
 The official implementation of the paper "[Parameter-Inverted Image Pyramid Networks](https://arxiv.org)".
 
-## Highlights
+## ⭐️ Highlights
 
 **TL;DR:** We introduce the Parameter-Inverted Image Pyramid Networks (PIIP), which uses models with different parameter sizes to process different resolution levels of the image pyramid, thereby balancing computational efficiency and performance.
 
@@ -14,25 +14,29 @@ The official implementation of the paper "[Parameter-Inverted Image Pyramid Netw
 <img src="imgs/scatter_box.png" alt="scatter" width="50%"/> 
 </p>
 
-## Abstract
+## 📌 Abstract
 
 Image pyramids are commonly used in modern computer vision tasks to obtain multi-scale features for precise understanding of images. However, image pyramids process multiple resolutions of images using the same large-scale model, which requires significant computational cost. To overcome this issue, we propose a novel network architecture known as the Parameter-Inverted Image Pyramid Networks (PIIP). Our core idea is to use models with different parameter sizes to process different resolution levels of the image pyramid, thereby balancing computational efficiency and performance. Specifically, the input to PIIP is a set of multi-scale images, where higher resolution images are processed by smaller networks. We further propose a feature interaction mechanism to allow features of different resolutions to complement each other and effectively integrate information from different spatial scales. Extensive experiments demonstrate that the PIIP achieves superior performance in tasks such as object detection, segmentation, and image classification, compared to traditional image pyramid methods and single-branch networks, while reducing computational cost. Notably, when applying our method on a large-scale vision foundation model InternViT-6B, we improve its performance by 1%-2% on detection and segmentation with only 40%-60% of the original computation. These results validate the effectiveness of the PIIP approach and provide a new technical direction for future vision computing tasks.
 
-## Method
+## 🔍 Method
 
 ![Architecture](imgs/architecture.jpg)
 
-## Usage
+## 🛠️ Usage
 
 For instructions on installation, pretrained models, training and evaluation, please refer to the readme files under each subfolder:
 
 - [mmdetection](mmdetection/README.md)
 - [classification](classification/README.md)
 
-## Released Models
+## 🚀 Released Models
 
 ### COCO Object Detection and Instance Segmentation
 
+**Note**: 
+1. We report the number of parameters and FLOPs of the backbone.
+2. Results in the paper are obtained with an internal codebase, with slightly different performance in this repo ($\leq\pm0.2$).
+3. Experiments involving InternViT-6B do not use window attention, different from those in the paper.
 
 |   Backbone   |  Detector  |     Resolution     | Schd |   Box mAP   |  Mask mAP  |  #Param  |    #FLOPs    |                                                                                                              Download                                                                                                              |
 | :----------: | :--------: | :----------------: | :--: | :---------: | :---------: | :------: | :-----------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
@@ -63,7 +67,6 @@ For instructions on installation, pretrained models, training and evaluation, pl
 | PIIP-SBL | Mask R-CNN |   DeiT III (S) + BEiTv2 (BL)    | 1568/1120/672 |  1x  |  51.8  |   45.4   |     [log](https://huggingface.co/OpenGVLab/PIIP/raw/main/detection/mask_rcnn_beit_sbl_1568_1120_672_fpn_1x_coco_bs16.log.json) \| [ckpt](https://huggingface.co/OpenGVLab/PIIP/resolve/main/detection/mask_rcnn_beit_sbl_1568_1120_672_fpn_1x_coco_bs16.pth?download=true) \| [cfg](mmdetection/configs/piip/3branch/mask_rcnn_beit_sbl_1568_1120_672_fpn_1x_coco_bs16.py)     |
 | PIIP-SBL | DINO |    DeiT III (384)    | 1792/1120/672 |  3x  |  57.8  |  -  |     [log](https://huggingface.co/OpenGVLab/PIIP/raw/main/detection/dino_4scale_deit_384_sbl_1792_1120_672_fpn_3x_coco_bs32_ms.log.json) \| [ckpt](https://huggingface.co/OpenGVLab/PIIP/resolve/main/detection/dino_4scale_deit_384_sbl_1792_1120_672_fpn_3x_coco_bs32_ms.pth?download=true) \| [cfg](mmdetection/configs/piip/3branch/dino_4scale_deit_384_sbl_1792_1120_672_fpn_3x_coco_bs32_ms.py)     |
 
-**Note**: i) we report the number of parameters and FLOPs of the backbone; ii) re-training results in slightly different performance from the original paper; iii) experiments involving InternViT-6B do not use window attention, unlike those in the paper.
 
 
 ###  ImageNet-1K Image Classification
@@ -76,13 +79,13 @@ For instructions on installation, pretrained models, training and evaluation, pl
 | PIIP-SBL | 384/192/128 | 489M   | 61.2G   | 85.9      | [config](classification/configs/piip_3branch_sbl_384-192-128_cls_token_augreg.py) | [log](https://huggingface.co/OpenGVLab/PIIP/resolve/main/classification/piip_3branch_sbl_384-192-128_cls_token_augreg.txt) \| [ckpt](https://huggingface.co/OpenGVLab/PIIP/resolve/main/classification/piip_3branch_sbl_384-192-128_cls_token_augreg.pth) |
 
 
-## Schedule
+## 📅 Schedule
 
 * [X]  detection code
 * [X]  classification code
 * [ ]  segmentation code
 
-## Citation
+## 🖊️ Citation
 
 If you find this work helpful for your research, please consider giving this repo a star ⭐ and citing our paper:
 
@@ -95,10 +98,10 @@ If you find this work helpful for your research, please consider giving this rep
 }
 ```
 
-## License
+## 📃 License
 
 This project is released under the [MIT license](LICENSE). Parts of this project contain code and models from other sources, which are subject to their respective licenses.
 
-## Acknowledgement
+## 🙏 Acknowledgements
 
 Our code is built with reference to the code of the following projects: [InternVL-MMDetSeg](https://github.com/OpenGVLab/InternVL-MMDetSeg), [ViT-Adapter](https://github.com/czczup/ViT-Adapter),  [DeiT](https://github.com/facebookresearch/deit), [MMDetection](https://github.com/open-mmlab/mmdetection), [MMSegmentation](https://github.com/open-mmlab/mmsegmentation), and [timm](https://github.com/huggingface/pytorch-image-models). Thanks for their awesome work!
