@@ -35,7 +35,7 @@ For instructions on installation, pretrained models, training and evaluation, pl
 
 **Note**: 
 1. We report the number of parameters and FLOPs of the backbone.
-2. Results in the paper are obtained with an internal codebase, with slightly different performance in this repo ($\leq\pm0.2$).
+2. Results in the paper were obtained with an internal codebase, which may exhibit slightly different performance than this repo ($\leq\pm0.2$).
 3. Experiments involving InternViT-6B do not use window attention, different from those in the paper.
 
 |   Backbone   |  Detector  |     Resolution     | Schd |   Box mAP   |  Mask mAP  |  #Param  |    #FLOPs    |                                                                                                              Download                                                                                                              |
