@@ -121,7 +121,7 @@ If you find this work helpful for your research, please consider giving this rep
 @article{piip,
   title={Parameter-Inverted Image Pyramid Networks},
   author={Zhu, Xizhou and Yang, Xue and Wang, Zhaokai and Li, Hao and Dou, Wenhan and Ge, Junqi and Lu, Lewei and Qiao, Yu and Dai, Jifeng},
-  journal={arXiv preprint arXiv:xxxx.xxxxx},
+  journal={arXiv preprint arXiv:2406.04330},
   year={2024}
 }
 ```
