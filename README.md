@@ -4,7 +4,7 @@ The official implementation of the paper "[Parameter-Inverted Image Pyramid Netw
 
 ## ⭐️ Highlights
 
-**TL;DR:** We introduce the Parameter-Inverted Image Pyramid Networks (PIIP), which uses models with different parameter sizes to process different resolution levels of the image pyramid, thereby balancing computational efficiency and performance.
+**TL;DR:** We introduce the Parameter-Inverted Image Pyramid Networks (PIIP), employing a parameter-inverted paradigm that uses models with different parameter sizes to process different resolution levels of the image pyramid, thereby saving computation cost while improving the performance.
 
 * Support tasks of `object detection`, `instance segmentation`, `semantic segmentation` and `image classification`.
 * Surpasses single-branch methods with `higher performance` and `lower computation cost`.
