@@ -44,7 +44,6 @@ model = dict(
             interaction_indexes=[[0, 3], [4, 7], [8, 11], [12, 15], [16, 19], [20, 23], [24, 27], [28, 31], [32, 35], [36, 39], [40, 43], [44, 47]],
             pretrained = 'pretrained/intern_vit_6b_224px.pth',
             norm_layer_type='RMSNorm',
-            img_norm_cfg = dict(mean=[127.5, 127.5, 127.5], std=[127.5, 127.5, 127.5], to_rgb=True)
         ),
         
         branch2=dict(
@@ -67,7 +66,6 @@ model = dict(
             interaction_indexes=[[0, 1], [2, 3], [4, 5], [6, 7], [8, 10], [11, 13], [14, 16], [17, 19], [20, 22], [23, 25], [26, 28], [29, 31]],
             pretrained = 'pretrained/mae_pretrain_vit_huge.pth',
             norm_layer_type='LayerNorm',
-            img_norm_cfg = dict(mean=[127.5, 127.5, 127.5], std=[127.5, 127.5, 127.5], to_rgb=True)
         ),
     ),
     neck=dict(

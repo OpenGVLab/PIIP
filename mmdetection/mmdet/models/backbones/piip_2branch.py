@@ -51,9 +51,6 @@ class PIIPTwoBranch(nn.Module):
         
         self.w1 = nn.Parameter(torch.tensor(1.0), requires_grad=True)
         self.w2 = nn.Parameter(torch.tensor(1.0), requires_grad=True)
-
-        self.img_norm_cfg_branch1 = branch1.pop("img_norm_cfg")
-        self.img_norm_cfg_branch2 = branch2.pop("img_norm_cfg")
         
         self.branch1_interaction_indexes = branch1.pop("interaction_indexes")
         self.branch2_interaction_indexes = branch2.pop("interaction_indexes")

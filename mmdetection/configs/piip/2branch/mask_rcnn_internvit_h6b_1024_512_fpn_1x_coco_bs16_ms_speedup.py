@@ -46,7 +46,6 @@ model = dict(
             pretrained = 'pretrained/intern_vit_6b_224px.pth',
             norm_layer_type='RMSNorm',
             mlp_type='fused_mlp',
-            img_norm_cfg = dict(mean=[127.5, 127.5, 127.5], std=[127.5, 127.5, 127.5], to_rgb=True)
         ),
         
         branch2=dict(
@@ -70,7 +69,6 @@ model = dict(
             pretrained = 'pretrained/mae_pretrain_vit_huge.pth',
             norm_layer_type='LayerNorm',
             mlp_type='fused_mlp',
-            img_norm_cfg = dict(mean=[127.5, 127.5, 127.5], std=[127.5, 127.5, 127.5], to_rgb=True)
         ),
     ),
     neck=dict(

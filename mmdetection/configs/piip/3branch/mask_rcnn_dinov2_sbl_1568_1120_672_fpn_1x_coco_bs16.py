@@ -52,7 +52,6 @@ model = dict(
                          28, 28, 28, 28, 28, 28,
                          28, 28, 28, 28, 28, 28,
                          28, 28, 28, 28, 28, 28],
-            img_norm_cfg = dict(mean=[127.5, 127.5, 127.5], std=[127.5, 127.5, 127.5], to_rgb=True)
         ),
         
         branch2=dict(
@@ -83,7 +82,6 @@ model = dict(
                          28, 28, 28,
                          28, 28, 28,
                          28, 28, 28],
-            img_norm_cfg = dict(mean=[127.5, 127.5, 127.5], std=[127.5, 127.5, 127.5], to_rgb=True)
         ),
         
         branch3=dict(
@@ -114,7 +112,6 @@ model = dict(
                          28, 28, 28,
                          28, 28, 28,
                          28, 28, 28],
-            img_norm_cfg = dict(mean=[127.5, 127.5, 127.5], std=[127.5, 127.5, 127.5], to_rgb=True)
         ),
     ),
     neck=dict(
