@@ -395,7 +395,7 @@ class InternViT6B(BaseModule):
                  embed_dim=3200, num_heads=25, mlp_ratio=4, init_values=0.1, qk_normalization=True, depth=48,
                  use_flash_attn=True, with_cp=True, layerscale_force_fp32=False, out_indices=[7, 11, 15, 23],
                  with_fpn=False, with_final_norm=False, window_attn=False, window_size=14,
-                 output_dtype="float16", pretrained=None, norm_layer_type='RMSNorm', use_simple_fpn=True,
+                 output_dtype="float32", pretrained=None, norm_layer_type='RMSNorm', use_simple_fpn=True,
                  mlp_type="regular", **kwargs):
 
         super().__init__()

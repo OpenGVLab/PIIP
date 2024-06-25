@@ -51,6 +51,7 @@ The released model weights are provided in [**the parent folder**](../README.md)
   pip install addict
   pip install deepspeed==0.8.0 # please install this old version
   pip install pydantic==1.10.2 # later versions may have compatibility issues
+  pip install future tensorboard
   ```
 - Install our customized `mmcv-full==1.7.0`:
 
