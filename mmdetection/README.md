@@ -61,11 +61,15 @@ The released model weights are provided in [**the parent folder**](../README.md)
   python setup.py develop
   cd ../
   ```
-- Install our customized mmdetection:
+- Install our customized mmdetection & mmsegmentation:
 
   ```bash
   cd mmdetection/
   python setup.py develop
+  cd ../
+  cd mmsegmentation/
+  python setup.py develop
+  cd ../
   ```
 - Compile the deformable attention:
 
