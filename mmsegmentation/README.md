@@ -6,12 +6,14 @@ The released model weights are provided in [**the parent folder**](../README.md)
 
 ## Installation
 
+Please refer to [installation of object detection](../mmdetection/README.md). 
+
+Then link the `ops` and `pretrained` directories to this folder:
+
 ```bash
 ln -s ../mmdetection/ops .
 ln -s ../mmdetection/pretrained .
 ```
-
-Please refer to [installation of object detection](../mmdetection/README.md).
 
 Note: the core model code is under `mmseg/models/backbones/`.
 
