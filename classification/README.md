@@ -14,7 +14,7 @@ The released model weights are provided in [**the parent folder**](../README.md)
   git clone https://github.com/OpenGVLab/PIIP
   cd PIIP/
   ```
-- Create a conda virtual environment and activate it ():
+- Create a conda virtual environment and activate it (Note: a separate env from the detection and segmentation env):
 
   ```bash
   conda create -n piip_cls python=3.9 -y
