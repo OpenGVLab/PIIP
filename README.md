@@ -1,8 +1,10 @@
 # <img src="imgs/invert_pyramid_v2.png" alt="pyramid" height="30"/> Parameter-Inverted Image Pyramid Networks (PIIP)
 
+
+
 [[Paper]](https://arxiv.org/abs/2406.04330) [[中文解读]](https://zhuanlan.zhihu.com/p/705734540)
 
-The official implementation of the paper "[Parameter-Inverted Image Pyramid Networks](https://arxiv.org/abs/2406.04330)".
+The official implementation of the paper "[Parameter-Inverted Image Pyramid Networks](https://arxiv.org/abs/2406.04330)" (NeurIPS 2024 Spotlight)
 
 ## ⭐️ Highlights
 
