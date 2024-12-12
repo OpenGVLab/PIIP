@@ -6,7 +6,7 @@
 
 The official implementation of the paper "[Parameter-Inverted Image Pyramid Networks](https://arxiv.org/abs/2406.04330)" 
 
-**NeurIPS 2024 Spotlight (Top 2.5%)**
+**NeurIPS 2024 Spotlight (Top 2.08%)**
 
 ## ⭐️ Highlights
 
