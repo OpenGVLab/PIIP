@@ -49,6 +49,24 @@ sh tools/dist_test.sh configs/piip/2branch/upernet_internvit_h6b_256_512_80k_ade
 sh tools/dist_test.sh configs/piip/2branch/upernet_internvit_h6b_256_512_80k_ade20k_bs16_lr4e-5.py work_dirs/upernet_internvit_h6b_256_512_80k_ade20k_bs16_lr4e-5/upernet_internvit_h6b_256_512_80k_ade20k_bs16_lr4e-5.pth 8 --eval mIoU
 ```
 
+## Visualization
+
+First download the pretrained checkpoints from [here](https://github.com/OpenGVLab/PIIP?tab=readme-ov-file#-released-models).
+
+To use gradio for visualizing segmentation results (recommended, faster as model is loaded only once):
+
+
+```bash
+python visualize_seg_gradio.py --config_file configs/piip/2branch/upernet_internvit_h6b_512_512_80k_ade20k_bs16_lr4e-5.py --checkpoint_file work_dirs/upernet_internvit_h6b_512_512_80k_ade20k_bs16_lr4e-5/upernet_internvit_h6b_512_512_80k_ade20k_bs16_lr4e-5.pth
+```
+
+To use command line for visualization:
+
+```bash
+python visualize_seg.py --config_file configs/piip/2branch/upernet_internvit_h6b_512_512_80k_ade20k_bs16_lr4e-5.py --checkpoint_file work_dirs/upernet_internvit_h6b_512_512_80k_ade20k_bs16_lr4e-5/upernet_internvit_h6b_512_512_80k_ade20k_bs16_lr4e-5.pth --img_path demo/demo.png --out_path visualization.jpg
+```
+
+
 ## FLOPs calculation
 
 We provide a simple script to calculate the number of FLOPs. Change the `config_list` in `../classification/get_flops.py` and run

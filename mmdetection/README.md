@@ -183,6 +183,35 @@ Evaluating segm...
  Average Recall     (AR) @[ IoU=0.50:0.95 | area= large | maxDets=1000 ] = 0.754
 ```
 
+## Visualization
+
+First download the pretrained checkpoints from [here](https://github.com/OpenGVLab/PIIP?tab=readme-ov-file#-released-models).
+
+To use gradio for visualizing detection results (recommended, faster as model is loaded only once):
+
+
+```bash
+python visualize_det_gradio.py --config_file PATH/TO/CONFIG_FILE --checkpoint_file PATH/TO/CHECKPOINT_FILE
+```
+
+To use command line for visualization:
+
+```bash
+python visualize_det.py --config_file PATH/TO/CONFIG_FILE --checkpoint_file PATH/TO/CHECKPOINT_FILE --img_path demo/demo.jpg --confidence_threshold 0.7 --out_path visualization.jpg
+```
+
+For instance, to run object detection with DINO, use 
+```bash
+--config_file configs/piip/2branch/dino_4scale_internvit_h6b_1024_768_fpn_1x_coco_bs32_ms.py --checkpoint_file work_dirs/dino_4scale_internvit_h6b_1024_768_fpn_1x_coco_bs32_ms/dino_4scale_internvit_h6b_1024_768_fpn_1x_coco_bs32_ms.pth
+```
+
+To run object detection and instance segmentation with Mask R-CNN, use 
+```bash
+--config_file configs/piip/2branch/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms.py --checkpoint_file work_dirs/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms.pth
+```
+
+
+
 ## FLOPs calculation
 
 We provide a simple script to calculate the number of FLOPs. Change the `config_list` in `../classification/get_flops.py` and run
