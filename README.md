@@ -1,7 +1,5 @@
 # <img src="imgs/invert_pyramid_v2.png" alt="pyramid" height="30"/> Parameter-Inverted Image Pyramid Networks (PIIP)
 
-
-
 [[Paper]](https://arxiv.org/abs/2406.04330) [[中文解读]](https://zhuanlan.zhihu.com/p/705734540) [[Slides]](https://www.wzk.plus/slides/PIIP_slides.pdf) [[Video]](https://youtu.be/Kdh3CNp8bfg)
 
 The official implementation of the paper "[Parameter-Inverted Image Pyramid Networks](https://arxiv.org/abs/2406.04330)" 
@@ -12,7 +10,7 @@ The official implementation of the paper "[Parameter-Inverted Image Pyramid Netw
 
 ## 📰 News
 
-[2025/1/13] We introduce PIIP-LLaVA, an MLLM that uses PIIP design to improve performance and save computational costs. We also extend PIIP to CNN-based structures and ViT-CNN hybrid structures. Code and models will be released soon. Check out our new [paper](https://arxiv.org/abs/2501.) for details.
+[2025/1/15] We introduce **PIIP-LLaVA**, an MLLM that uses PIIP design to improve performance and save computational costs. We also extend PIIP to CNN-based structures and ViT-CNN hybrid structures. Code and models will be released soon. Check out our new [paper](https://arxiv.org/abs/2501.) for details.
 
 
 
@@ -28,6 +26,14 @@ The official implementation of the paper "[Parameter-Inverted Image Pyramid Netw
 <img src="imgs/scatter_box.png" alt="scatter" width="50%"/> 
 </p>
 
+
+## 🖼 Qualitative Results
+
+<img src="imgs/detection_qualitative.jpg" alt="detection visualization" style="width: 70%; height: auto;" />
+
+<img src="imgs/multimodal_qualitative.jpg" alt="multimodal understanding visualization" style="width: 70%; height: auto;" />
+
+
 ## 📌 Abstract
 
 Image pyramids are widely adopted in top-performing methods to obtain multi-scale features for precise visual perception and understanding. However, current image pyramids use the same large-scale model to process multiple resolutions of images, leading to significant computational cost. To address this challenge, we propose a novel network architecture, called Parameter-Inverted Image Pyramid Networks (PIIP). Specifically, PIIP uses pretrained models (ViTs or CNNs) as branches to process multi-scale images, where images of higher resolutions are processed by smaller network branches to balance computational cost and performance. To integrate information from different spatial scales, we further propose a novel cross-branch feature interaction mechanism. To validate PIIP, we apply it to various perception models and a representative multimodal large language model called LLaVA, and conduct extensive experiments on various tasks such as object detection, segmentation, image classification and multimodal understanding. PIIP achieves superior performance compared to single-branch and existing multi-resolution approaches with lower computational cost. When applied to InternViT-6B, a large-scale vision foundation model,  PIIP can improve its performance by 1%-2% on detection and segmentation with only 40\%-60\% of the original computation, finally achieving 60.0 box AP on MS COCO and 59.7 mIoU on ADE20K. For multimodal understanding, our PIIP-LLaVA achieves 73.0% accuracy on TextVQA and 74.5% on MMBench with only 2.8M training data.
@@ -37,12 +43,6 @@ Image pyramids are widely adopted in top-performing methods to obtain multi-scal
 ![Architecture](imgs/architecture_v2.jpg)
 
 <img src="imgs/piip_llava.jpg" alt="PIIP-LLaVA" style="width: 70%; height: auto;" />
-
-## 🖼 Qualitative Results
-
-<img src="imgs/detection_qualitative.jpg" alt="detection visualization" style="width: 70%; height: auto;" />
-
-<img src="imgs/multimodal_qualitative.jpg" alt="multimodal understanding visualization" style="width: 70%; height: auto;" />
 
 
 
