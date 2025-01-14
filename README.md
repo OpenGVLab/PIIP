@@ -29,10 +29,11 @@ The official implementation of the paper "[Parameter-Inverted Image Pyramid Netw
 
 ## 🖼 Qualitative Results
 
+<p align="center">
 <img src="imgs/detection_qualitative.jpg" alt="detection visualization" style="width: 70%; height: auto;" />
 
 <img src="imgs/multimodal_qualitative.jpg" alt="multimodal understanding visualization" style="width: 70%; height: auto;" />
-
+</p>
 
 ## 📌 Abstract
 
@@ -42,8 +43,9 @@ Image pyramids are widely adopted in top-performing methods to obtain multi-scal
 
 ![Architecture](imgs/architecture_v2.jpg)
 
-<img src="imgs/piip_llava.jpg" alt="PIIP-LLaVA" style="width: 70%; height: auto;" />
-
+<p align="center">
+<img src="imgs/piip_llava.jpg" alt="PIIP-LLaVA" style="width: 60%; height: auto;" />
+</p>
 
 
 ## 🛠️ Usage
