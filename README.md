@@ -10,7 +10,7 @@ The official implementation of the paper "[Parameter-Inverted Image Pyramid Netw
 
 ## 📰 News
 
-[2025/1/15] We introduce **PIIP-LLaVA**, an MLLM that uses PIIP design to improve performance and save computational costs. We also extend PIIP to CNN-based structures and ViT-CNN hybrid structures. Code and models will be released soon. Check out our new [paper](https://arxiv.org/abs/2501.) for details.
+[2025/1/15] We introduce **PIIP-LLaVA**, an MLLM that uses PIIP design to improve performance and save computational costs. We also extend PIIP to CNN-based structures and ViT-CNN hybrid structures. Code and models will be released soon. Check out our new **[paper](https://arxiv.org/abs/2501.07783)** for details.
 
 
 
@@ -143,7 +143,7 @@ If you find this work helpful for your research, please consider giving this rep
 @article{piip_v2,
   title={Parameter-Inverted Image Pyramid Networks for Visual Perception and Multimodal Understanding},
   author={Wang, Zhaokai and Zhu, Xizhou and Yang, Xue and Luo, Gen and Li, Hao and Tian, Changyao and Dou, Wenhan and Ge, Junqi and Lu, Lewei and Qiao, Yu and Dai, Jifeng},
-  journal={arXiv preprint arXiv:2501.xxxxx},
+  journal={arXiv preprint arXiv:2501.07783},
   year={2025}
 }
 ```
