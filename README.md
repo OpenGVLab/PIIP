@@ -1,6 +1,11 @@
 # <img src="imgs/invert_pyramid_v2.png" alt="pyramid" height="30"/> Parameter-Inverted Image Pyramid Networks (PIIP)
 
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/parameter-inverted-image-pyramid-networks/semantic-segmentation-on-ade20k)](https://paperswithcode.com/sota/semantic-segmentation-on-ade20k?p=parameter-inverted-image-pyramid-networks) 	
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/parameter-inverted-image-pyramid-networks/object-detection-on-coco)](https://paperswithcode.com/sota/object-detection-on-coco?p=parameter-inverted-image-pyramid-networks)
+
 [[Paper]](https://arxiv.org/abs/2406.04330) [[中文解读]](https://zhuanlan.zhihu.com/p/705734540) [[Slides]](https://www.wzk.plus/slides/PIIP_slides.pdf) [[Video]](https://youtu.be/Kdh3CNp8bfg)
+
+
 
 The official implementation of the paper "[Parameter-Inverted Image Pyramid Networks](https://arxiv.org/abs/2406.04330)" 
 
