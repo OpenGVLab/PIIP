@@ -47,7 +47,6 @@ class ConvNextHFWrapper(nn.Module):
         
         
         self.use_gradient_checkpointing = False
-        # self.use_gradient_checkpointing = True
         
         kwargs = {}
         if drop_path_rate is not None:
@@ -55,7 +54,6 @@ class ConvNextHFWrapper(nn.Module):
         self.convnext_model = ConvNextModel.from_pretrained(
             pretrained,
             **kwargs
-            # gradient_checkpointing=self.use_gradient_checkpointing,
         )
         if self.use_gradient_checkpointing:
             self.convnext_model.gradient_checkpointing_enable()
@@ -144,7 +142,6 @@ class ConvNextHFWrapper(nn.Module):
             f2 = self.fpn2(last_hidden_state).to(torch.float32).contiguous() #(B, dim2, H/8, W/8)
             f3 = self.fpn3(last_hidden_state).to(torch.float32).contiguous() #(B, dim3, H/16, W/16)
             f4 = self.fpn4(last_hidden_state).to(torch.float32).contiguous() #(B, dim4, H/32, W/32)
-            # import ipdb; ipdb.set_trace()
             assert f1.shape[-1] == pixel_values.shape[-1] / 4, f"{f1.shape=}, {pixel_values.shape=}"
             assert f2.shape[-1] == pixel_values.shape[-1] / 8, f"{f2.shape=}, {pixel_values.shape=}"
             assert f3.shape[-1] == pixel_values.shape[-1] / 16, f"{f3.shape=}, {pixel_values.shape=}"
@@ -153,7 +150,6 @@ class ConvNextHFWrapper(nn.Module):
             return [f1, f2, f3, f4]
         else: # regular fpn
             assert len(hidden_states) == 5
-            # import ipdb; ipdb.set_trace()
             ret = [h.to(torch.float32).contiguous() for h in hidden_states[1:]]
             assert ret[0].shape[-1] == pixel_values.shape[-1] / 4, f"{ret[0].shape=}, {pixel_values.shape=}"
             assert ret[1].shape[-1] == pixel_values.shape[-1] / 8, f"{ret[1].shape=}, {pixel_values.shape=}"

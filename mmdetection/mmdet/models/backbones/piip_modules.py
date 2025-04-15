@@ -285,7 +285,7 @@ def forward_blocks(x, H, W, blocks, cls_=None):
     if cls_ is not None:
         x = torch.cat((cls_, x), dim=1)
         
-    if isinstance(blocks[0], ResNetLayerWrapper) or isinstance(blocks[0], ConvNextLayerWrapper):
+    if isinstance(blocks[0], ConvNextLayerWrapper):
         for _, blk in enumerate(blocks):
             x, H, W = blk(x, H, W)
     else:

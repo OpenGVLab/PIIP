@@ -46,7 +46,7 @@ class PIIPThreeBranch(nn.Module):
                  pretrained=None,
                  with_simple_fpn=True,
                  out_interaction_indexes=[],
-                 cal_flops_wo_fpn=False,
+                 cal_flops=False,
                  ):
         
         super().__init__()
@@ -56,7 +56,7 @@ class PIIPThreeBranch(nn.Module):
         
         self.interact_attn_type = interact_attn_type
         self.out_interaction_indexes = out_interaction_indexes
-        self.cal_flops_wo_fpn = cal_flops_wo_fpn
+        self.cal_flops = cal_flops
         branch1 = branch1.copy()
         branch2 = branch2.copy()
         branch3 = branch3.copy()
@@ -163,7 +163,7 @@ class PIIPThreeBranch(nn.Module):
                 attn_type=interact_attn_type,
                 with_proj=interaction_proj,
             )
-            for _ in range(len(self.branch1_interaction_indexes))
+            for idx in range(len(self.branch1_interaction_indexes))
         ])
         self.with_simple_fpn = with_simple_fpn
         # assert not is_dino
@@ -211,6 +211,10 @@ class PIIPThreeBranch(nn.Module):
         self.fpn3.apply(self._init_weights)
         self.fpn4.apply(self._init_weights)
 
+        dim1 = self.branch1.embed_dim
+        dim2 = self.branch2.embed_dim
+        dim3 = self.branch3.embed_dim
+        
         if not with_simple_fpn:
             assert out_interaction_indexes is not None
             for out_idx in self.out_interaction_indexes:
@@ -218,40 +222,50 @@ class PIIPThreeBranch(nn.Module):
                 dim2_ = dims2[self.branch2_interaction_layer_index[out_idx]]
                 dim3_ = dims3[self.branch3_interaction_layer_index[out_idx]]
                 self.create_intermediate_merge_module(out_idx, dim1_, dim2_, dim3_)
-                    
-                
-        
-        dim1 = self.branch1.embed_dim
-        dim2 = self.branch2.embed_dim
-        dim3 = self.branch3.embed_dim
-        
-        #! TODO: check merge_branch 
-        self.merge_branch1 = nn.Sequential(
-            nn.Conv2d(dim1, dim1, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.GroupNorm(32, dim1),
-            nn.ReLU(inplace=True),
-            nn.Conv2d(dim1, dim1, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.GroupNorm(32, dim1),
-            nn.ReLU(inplace=True),
-        )
-        
-        self.merge_branch2 = nn.Sequential(
-            nn.Conv2d(dim2, dim1, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.GroupNorm(32, dim1),
-            nn.ReLU(inplace=True),
-            nn.Conv2d(dim1, dim1, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.GroupNorm(32, dim1),
-            nn.ReLU(inplace=True),
-        )
-        
-        self.merge_branch3 = nn.Sequential(
-            nn.Conv2d(dim3, dim1, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.GroupNorm(32, dim1),
-            nn.ReLU(inplace=True),
-            nn.Conv2d(dim1, dim1, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.GroupNorm(32, dim1),
-            nn.ReLU(inplace=True),
-        )
+            
+            self.merge_branch1 = nn.Sequential(
+                nn.GroupNorm(32, dim1),
+                nn.ReLU(inplace=True),
+            )
+            
+            self.merge_branch2 = nn.Sequential(
+                nn.Conv2d(dim2, dim1, kernel_size=3, stride=1, padding=1, bias=False),
+                nn.GroupNorm(32, dim1),
+                nn.ReLU(inplace=True),
+            )
+            
+            self.merge_branch3 = nn.Sequential(
+                nn.Conv2d(dim3, dim1, kernel_size=3, stride=1, padding=1, bias=False),
+                nn.GroupNorm(32, dim1),
+                nn.ReLU(inplace=True),
+            )
+        else:
+            self.merge_branch1 = nn.Sequential(
+                nn.Conv2d(dim1, dim1, kernel_size=3, stride=1, padding=1, bias=False),
+                nn.GroupNorm(32, dim1),
+                nn.ReLU(inplace=True),
+                nn.Conv2d(dim1, dim1, kernel_size=3, stride=1, padding=1, bias=False),
+                nn.GroupNorm(32, dim1),
+                nn.ReLU(inplace=True),
+            )
+            
+            self.merge_branch2 = nn.Sequential(
+                nn.Conv2d(dim2, dim1, kernel_size=3, stride=1, padding=1, bias=False),
+                nn.GroupNorm(32, dim1),
+                nn.ReLU(inplace=True),
+                nn.Conv2d(dim1, dim1, kernel_size=3, stride=1, padding=1, bias=False),
+                nn.GroupNorm(32, dim1),
+                nn.ReLU(inplace=True),
+            )
+            
+            self.merge_branch3 = nn.Sequential(
+                nn.Conv2d(dim3, dim1, kernel_size=3, stride=1, padding=1, bias=False),
+                nn.GroupNorm(32, dim1),
+                nn.ReLU(inplace=True),
+                nn.Conv2d(dim1, dim1, kernel_size=3, stride=1, padding=1, bias=False),
+                nn.GroupNorm(32, dim1),
+                nn.ReLU(inplace=True),
+            )        
         
         self.merge_branch1.apply(self._init_weights)
         self.merge_branch2.apply(self._init_weights)
@@ -487,7 +501,6 @@ class PIIPThreeBranch(nn.Module):
                 
                 cur_out = x1_ * getattr(self, f"intermediate_merging_{i}_w1") + x2_ * getattr(self, f"intermediate_merging_{i}_w2") + x3_ * getattr(self, f"intermediate_merging_{i}_w3")
 
-                # import ipdb; ipdb.set_trace()
                 outs.append(cur_out)
         # Branch merging
         x1 = x1.transpose(1, 2).view(bs1, self.branch1.embed_dim, H1, W1)
@@ -507,7 +520,7 @@ class PIIPThreeBranch(nn.Module):
         
         out = x1 * self.w1 + x2 * self.w2 + x3 * self.w3
         
-        if self.cal_flops_wo_fpn:
+        if self.cal_flops:
             return
         
         # Outputs for fpn

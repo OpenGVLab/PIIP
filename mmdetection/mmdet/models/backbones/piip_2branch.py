@@ -39,7 +39,8 @@ class PIIPTwoBranch(nn.Module):
                  
                  branch1={},
                  branch2={},
-                 pretrained=None
+                 pretrained=None,
+                 cal_flops=False,
                  ):
         
         super().__init__()
@@ -48,6 +49,9 @@ class PIIPTwoBranch(nn.Module):
             norm_layer = nn.Identity
         
         self.interact_attn_type = interact_attn_type
+        self.cal_flops = cal_flops
+        branch1 = branch1.copy()
+        branch2 = branch2.copy()
         
         self.w1 = nn.Parameter(torch.tensor(1.0), requires_grad=True)
         self.w2 = nn.Parameter(torch.tensor(1.0), requires_grad=True)
@@ -245,7 +249,9 @@ class PIIPTwoBranch(nn.Module):
         x2 = self.merge_branch2(x2)
         
         out = x1 * self.w1 + x2 * self.w2
-             
+        
+        if self.cal_flops:
+            return
         
         # Outputs for fpn
         if not self.is_dino:

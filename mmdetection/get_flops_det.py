@@ -155,12 +155,12 @@ def get_backbone_flops(model, input_shape, model_config):
     
     return flops_to_string(flops, precision=1), params_to_string(params, precision=1)
 
-def main(config_name, out_file=None, wo_fpn=False):
+def main(config_name, out_file=None):
     cfg = Config.fromfile(config)
 
     
     cfg.model.neck.type = "FPNLateralOnly"
-    cfg.model.backbone.cal_flops_wo_fpn = wo_fpn
+    cfg.model.backbone.cal_flops = True
         
     print("building detector")
     model = build_detector(
@@ -235,17 +235,19 @@ def main(config_name, out_file=None, wo_fpn=False):
     
     print(os.path.basename(config), "FLOPs", flops, "Params", params, "Shape", h)
     if out_file is not None:
-        prefix = "wo FPN" if wo_fpn else "w/ FPN"
-        print(prefix, os.path.basename(config).replace(".py", "").ljust(60), "FLOPs", flops, "Params", params, "Shape", h, 
+        print(os.path.basename(config).replace(".py", "").ljust(60), "FLOPs", flops, "Params", params, "Shape", h, 
               "Branch1", branch1_params, "Branch2", branch2_params, "Branch3", branch3_params, "Branch4", branch4_params, "Interaction", interaction_params, "Merge", merge_params, file=out_file, flush=True)
        
 
 
 if __name__ == "__main__":
     config_list = [
-        "configs/piip/2branch/*.py",
+        # "configs/piip/convnext/*.py",
+        # "configs/piip/2branch/dino_4scale_internvit_h6b_1024_768_fpn_1x_coco_bs32_ms.py",
         "configs/piip/3branch/*.py",
-        "configs/piip/convnext/*.py",
+        "configs/piip/2branch/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms.py",
+        "configs/piip/4branch/*.py",
+        "configs/piip/baseline/*.py",
     ]
     
     new_config_list = []
@@ -254,19 +256,17 @@ if __name__ == "__main__":
         for file in glob.glob(pattern):
             if "dino" in file or "uniperceiver" in file:
                 continue
+            if "speedup" in file:
+                continue
             new_config_list.append(file)
-    config_list = sorted(new_config_list)
+    # config_list = sorted(new_config_list)
+    config_list = new_config_list
     
     
     with open(f"flops.txt", "w") as f:
         for config in config_list:
-            if config is None:
-                print("\n", file=f, flush=True)
-                continue
-            
             try:
-                # main(config, out_file=f, wo_fpn=False)
-                main(config, out_file=f, wo_fpn=True)
+                main(config, out_file=f)
             except:
                 print("ERR CONFIG", config)
                 raise

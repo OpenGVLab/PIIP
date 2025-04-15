@@ -32,12 +32,14 @@ The released model weights are provided in [**the parent folder**](../README.md)
   This is because different versions of flash attention yield slight differences in results.
 
   ```bash
+  # install with pip
+  pip install flash_attn==0.2.8
+  # or build from source (with FusedMLP)
   git clone https://github.com/Dao-AILab/flash-attention.git
   cd flash-attention
   git checkout v0.2.8
   pip install ninja
   python setup.py install # I use gcc-7.3 to compile this package
-  # for FusedMLP
   cd csrc/fused_dense_lib
   pip install .
   ```
@@ -45,10 +47,11 @@ The released model weights are provided in [**the parent folder**](../README.md)
 
   ```bash
   conda install -c conda-forge termcolor yacs pyyaml scipy pip -y
-  pip install opencv-python
+  pip install opencv-python scipy matplotlib addict
+  pip install transformers==4.44.1
+  pip install numpy==1.26.4
   pip install timm==0.6.11
   pip install yapf==0.40.1
-  pip install addict
   pip install deepspeed==0.8.0 # please install this old version
   pip install pydantic==1.10.2 # later versions may have compatibility issues
   pip install future tensorboard

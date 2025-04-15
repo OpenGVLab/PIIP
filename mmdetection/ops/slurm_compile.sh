@@ -1,6 +1,6 @@
 cd deformable_attention
 
-partition='INTERN3'
+partition='INTERN2'
 TYPE='spot'
 JOB_NAME='test'
 GPUS=1

@@ -120,3 +120,11 @@ docs/modelzoo_statistics.md
 *.pth
 *.py~
 *.sh~
+
+/get_flops_det.sh
+/test.sh
+/*.log
+
+/flash-attention/
+/flops.txt
+/pretrained

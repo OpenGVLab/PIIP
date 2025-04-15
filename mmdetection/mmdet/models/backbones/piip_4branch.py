@@ -40,7 +40,8 @@ class PIIPFourBranch(nn.Module):
                  branch2={},
                  branch3={},
                  branch4={},
-                 pretrained=None
+                 pretrained=None,
+                 cal_flops=False,
                  ):
         
         super().__init__()
@@ -49,6 +50,11 @@ class PIIPFourBranch(nn.Module):
             norm_layer = nn.Identity
         
         self.interact_attn_type = interact_attn_type
+        self.cal_flops = cal_flops
+        branch1 = branch1.copy()
+        branch2 = branch2.copy()
+        branch3 = branch3.copy()
+        branch4 = branch4.copy()
         
         self.w1 = nn.Parameter(torch.tensor(1.0), requires_grad=True)
         self.w2 = nn.Parameter(torch.tensor(1.0), requires_grad=True)
@@ -315,7 +321,9 @@ class PIIPFourBranch(nn.Module):
         x4 = self.merge_branch4(x4)
         
         out = x1 * self.w1 + x2 * self.w2 + x3 * self.w3 + x4 * self.w4
-             
+        
+        if self.cal_flops:
+            return
         
         # Outputs for fpn
         if not self.is_dino:
