@@ -18,7 +18,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.utils.checkpoint as cp
-from mmdet.mmcv_custom import load_checkpoint
+from mmcv_custom import load_checkpoint
 from mmdet.models.builder import BACKBONES
 from mmdet.utils import get_root_logger
 from timm.models.layers import drop_path, to_2tuple, trunc_normal_
@@ -360,7 +360,7 @@ class BEiT(nn.Module):
                  hybrid_backbone=None, norm_layer=None, init_values=None, use_checkpoint=False,
                  use_abs_pos_emb=False, use_rel_pos_bias=True, use_shared_rel_pos_bias=False,
                  pretrained=None, with_cp=False, window_attn=False, window_size=14,
-                 with_fpn=False, use_simple_fpn=True, out_indices=[7, 11, 15, 23], output_dtype="float32"
+                 with_fpn=False, use_simple_fpn=True, out_indices=[7, 11, 15, 23], output_dtype="float32", cal_flops=False,
     ):
         super().__init__()
         norm_layer = norm_layer or partial(nn.LayerNorm, eps=1e-6)

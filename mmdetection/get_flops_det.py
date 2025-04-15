@@ -242,22 +242,13 @@ def main(config_name, out_file=None):
 
 if __name__ == "__main__":
     config_list = [
-        # "configs/piip/convnext/*.py",
-        # "configs/piip/2branch/dino_4scale_internvit_h6b_1024_768_fpn_1x_coco_bs32_ms.py",
-        "configs/piip/3branch/*.py",
-        "configs/piip/2branch/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms.py",
-        "configs/piip/4branch/*.py",
-        "configs/piip/baseline/*.py",
+        "configs/piip/convnext/*.py",
     ]
     
     new_config_list = []
     for pattern in config_list:
         assert len(glob.glob(pattern)) > 0, pattern
         for file in glob.glob(pattern):
-            if "dino" in file or "uniperceiver" in file:
-                continue
-            if "speedup" in file:
-                continue
             new_config_list.append(file)
     # config_list = sorted(new_config_list)
     config_list = new_config_list

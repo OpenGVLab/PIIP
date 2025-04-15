@@ -119,12 +119,12 @@ Note: the core model code is under `mmdet/models/backbones/`.
 
 ## Training
 
-To train PIIP-TSB Mask R-CNN on COCO train2017 on a single node with 8 gpus for 12 epochs run:
+To train PIIP-TSB Mask R-CNN on COCO train2017 on a single node with 8 gpus for 12 epochs:
 
 ```bash
 sh tools/dist_train.sh configs/piip/3branch/mask_rcnn_beit_tsb_1120_896_448_fpn_1x_coco_bs16.py 8
 # or manage jobs with slurm
-GPUS=8 sh tools/slurm_train.sh <partition> <job-name> configs/piip/3branch/mask_rcnn_beit_tsb_1120_896_448_fpn_1x_coco_bs16.py
+GPUS=8 sh tools/slurm_train.sh <partition> <job-name> configs/piip/3branch/mask_rcnn_beit_tsb_1120_896_448_fpn_1x_coco_bs16.py ./work_dir/
 ```
 
 **Note**: You can modify the `deepspeed` parameter in the configuration file to decide whether to use deepspeed. If you want to resume the deepspeed pretrained model for finetuning, you need to set `deepspeed_load_module_only=True` in the config.
@@ -145,13 +145,14 @@ python tools/test.py configs/piip/2branch/mask_rcnn_internvit_h6b_1024_512_fpn_1
 To evaluate PIIP-H6B Mask R-CNN on COCO val2017 on a single node with 8 gpus:
 
 ```bash
+# w/o deepspeed
+# download the pth to `work_dirs/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms/`
+sh tools/dist_test.sh configs/piip/2branch/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms work_dirs/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms.pth 8 --eval bbox segm
+
 # w/ deepspeed
 sh tools/dist_test.sh configs/piip/2branch/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms work_dirs/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms/iter_87961/global_step87960 8 --eval bbox segm
 # w/ deepspeed and set `deepspeed=False` in the configuration file
 sh tools/dist_test.sh configs/piip/2branch/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms work_dirs/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms/iter_87961/global_step87960/mp_rank_00_model_states.pt 8 --eval bbox segm
-# w/o deepspeed
-sh tools/dist_test.sh configs/piip/2branch/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms work_dirs/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms.pth 8 --eval bbox segm
-
 ```
 
 This should give

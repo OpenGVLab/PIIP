@@ -128,3 +128,4 @@ docs/modelzoo_statistics.md
 /flash-attention/
 /flops.txt
 /pretrained
+/tools/slurm_train_test.sh

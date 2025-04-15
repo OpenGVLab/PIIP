@@ -228,7 +228,7 @@ evaluation = dict(interval=1, save_best=None, metric=['bbox'])
 
 custom_imports = dict(
     imports=[
-        'mmdet.mmcv_custom'],
+        'mmcv_custom'],
     allow_failed_imports=False
 )
 
