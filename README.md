@@ -1,32 +1,57 @@
 # <img src="imgs/invert_pyramid_v2.png" alt="pyramid" height="30"/> Parameter-Inverted Image Pyramid Networks (PIIP)
 
-
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/parameter-inverted-image-pyramid-networks/semantic-segmentation-on-ade20k)](https://paperswithcode.com/sota/semantic-segmentation-on-ade20k?p=parameter-inverted-image-pyramid-networks) 	
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/parameter-inverted-image-pyramid-networks/object-detection-on-coco)](https://paperswithcode.com/sota/object-detection-on-coco?p=parameter-inverted-image-pyramid-networks)
 
 [[Paper]](https://arxiv.org/abs/2406.04330) [[中文解读]](https://zhuanlan.zhihu.com/p/705734540) [[Slides]](https://www.wzk.plus/slides/PIIP_slides.pdf) [[Video]](https://youtu.be/Kdh3CNp8bfg)
+
+
 
 The official implementation of the paper "[Parameter-Inverted Image Pyramid Networks](https://arxiv.org/abs/2406.04330)" 
 
 **NeurIPS 2024 Spotlight (Top 2.08%)**
 
+
+
+## 📰 News
+
+[2025/1/15] We introduce **PIIP-LLaVA**, an MLLM that uses PIIP design to improve performance and save computational costs. We also extend PIIP to CNN-based structures and ViT-CNN hybrid structures. Code and models will be released soon. Check out our new **[paper](https://arxiv.org/abs/2501.07783)** for details.
+
+
+
 ## ⭐️ Highlights
 
 **TL;DR:** We introduce the Parameter-Inverted Image Pyramid Networks (PIIP), employing a parameter-inverted paradigm that uses models with different parameter sizes to process different resolution levels of the image pyramid, thereby saving computation cost while improving the performance.
 
-* Support tasks of `object detection`, `instance segmentation`, `semantic segmentation` and `image classification`.
-* Surpasses single-branch methods with `higher performance` and `lower computation cost`.
-* Improve the performance of `InternViT-6B` on object detection by 2.0% (55.8\% $\rm AP^b$) while reducing computation cost by 62\%.
+* Support tasks of **object detection, instance segmentation, semantic segmentation , image classification, and multimodal understanding.**
+* Surpasses single-branch and other multi-resolution methods with **higher performance and lower computation costs.**
+* Achieve **60.0 $\rm AP^b$)** on COCO object detection with InternViT-6B, and 73.0% accuracy on TextVQA and 74.5% on MMBench with only 2.8M training data.
 
 <p align="center">
 <img src="imgs/scatter_box.png" alt="scatter" width="50%"/> 
 </p>
 
+
+## 🖼 Qualitative Results
+
+<p align="center">
+<img src="imgs/detection_qualitative.jpg" alt="detection visualization" style="width: 70%; height: auto;" />
+
+<img src="imgs/multimodal_qualitative.jpg" alt="multimodal understanding visualization" style="width: 70%; height: auto;" />
+</p>
+
 ## 📌 Abstract
 
-Image pyramids are commonly used in modern computer vision tasks to obtain multi-scale features for precise understanding of images. However, image pyramids process multiple resolutions of images using the same large-scale model, which requires significant computational cost. To overcome this issue, we propose a novel network architecture known as the Parameter-Inverted Image Pyramid Networks (PIIP). Our core idea is to use models with different parameter sizes to process different resolution levels of the image pyramid, thereby balancing computational efficiency and performance. Specifically, the input to PIIP is a set of multi-scale images, where higher resolution images are processed by smaller networks. We further propose a feature interaction mechanism to allow features of different resolutions to complement each other and effectively integrate information from different spatial scales. Extensive experiments demonstrate that the PIIP achieves superior performance in tasks such as object detection, segmentation, and image classification, compared to traditional image pyramid methods and single-branch networks, while reducing computational cost. Notably, when applying our method on a large-scale vision foundation model InternViT-6B, we improve its performance by 1%-2% on detection and segmentation with only 40%-60% of the original computation. These results validate the effectiveness of the PIIP approach and provide a new technical direction for future vision computing tasks.
+Image pyramids are widely adopted in top-performing methods to obtain multi-scale features for precise visual perception and understanding. However, current image pyramids use the same large-scale model to process multiple resolutions of images, leading to significant computational cost. To address this challenge, we propose a novel network architecture, called Parameter-Inverted Image Pyramid Networks (PIIP). Specifically, PIIP uses pretrained models (ViTs or CNNs) as branches to process multi-scale images, where images of higher resolutions are processed by smaller network branches to balance computational cost and performance. To integrate information from different spatial scales, we further propose a novel cross-branch feature interaction mechanism. To validate PIIP, we apply it to various perception models and a representative multimodal large language model called LLaVA, and conduct extensive experiments on various tasks such as object detection, segmentation, image classification and multimodal understanding. PIIP achieves superior performance compared to single-branch and existing multi-resolution approaches with lower computational cost. When applied to InternViT-6B, a large-scale vision foundation model,  PIIP can improve its performance by 1%-2% on detection and segmentation with only 40\%-60\% of the original computation, finally achieving 60.0 box AP on MS COCO and 59.7 mIoU on ADE20K. For multimodal understanding, our PIIP-LLaVA achieves 73.0% accuracy on TextVQA and 74.5% on MMBench with only 2.8M training data.
 
 ## 🔍 Method
 
-![Architecture](imgs/architecture.jpg)
+![Architecture](imgs/architecture_v2.jpg)
+
+<p align="center">
+<img src="imgs/piip_llava.jpg" alt="PIIP-LLaVA" style="width: 60%; height: auto;" />
+</p>
+
 
 ## 🛠️ Usage
 
@@ -95,12 +120,18 @@ For instructions on installation, pretrained models, training and evaluation, pl
 | PIIP-SBL | 320/160/96  | 489M   | 39.0G   | 85.2      | [config](classification/configs/piip_3branch_sbl_320-160-96_cls_token_augreg.py)  | [log](https://huggingface.co/OpenGVLab/PIIP/resolve/main/classification/piip_3branch_sbl_320-160-96_cls_token_augreg.txt) \| [ckpt](https://huggingface.co/OpenGVLab/PIIP/resolve/main/classification/piip_3branch_sbl_320-160-96_cls_token_augreg.pth)   |
 | PIIP-SBL | 384/192/128 | 489M   | 61.2G   | 85.9      | [config](classification/configs/piip_3branch_sbl_384-192-128_cls_token_augreg.py) | [log](https://huggingface.co/OpenGVLab/PIIP/resolve/main/classification/piip_3branch_sbl_384-192-128_cls_token_augreg.txt) \| [ckpt](https://huggingface.co/OpenGVLab/PIIP/resolve/main/classification/piip_3branch_sbl_384-192-128_cls_token_augreg.pth) |
 
+### Multimodal Understanding
+
+Will be released soon
+
+
 
 ## 📅 Schedule
 
 * [X]  detection code
 * [X]  classification code
-* [X]  segmentation code
+* [x]  segmentation code
+* [ ]  multimodal understanding code
 
 ## 🖊️ Citation
 
@@ -112,6 +143,13 @@ If you find this work helpful for your research, please consider giving this rep
   author={Zhu, Xizhou and Yang, Xue and Wang, Zhaokai and Li, Hao and Dou, Wenhan and Ge, Junqi and Lu, Lewei and Qiao, Yu and Dai, Jifeng},
   journal={arXiv preprint arXiv:2406.04330},
   year={2024}
+}
+
+@article{piip_v2,
+  title={Parameter-Inverted Image Pyramid Networks for Visual Perception and Multimodal Understanding},
+  author={Wang, Zhaokai and Zhu, Xizhou and Yang, Xue and Luo, Gen and Li, Hao and Tian, Changyao and Dou, Wenhan and Ge, Junqi and Lu, Lewei and Qiao, Yu and Dai, Jifeng},
+  journal={arXiv preprint arXiv:2501.07783},
+  year={2025}
 }
 ```
 
