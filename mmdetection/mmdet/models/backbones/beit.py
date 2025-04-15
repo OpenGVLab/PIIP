@@ -24,6 +24,37 @@ from mmdet.utils import get_root_logger
 from timm.models.layers import drop_path, to_2tuple, trunc_normal_
 
 
+class LayerNorm(nn.Module):
+    r""" LayerNorm that supports two data formats: channels_last (default) or channels_first.
+    The ordering of the dimensions in the inputs. channels_last corresponds to inputs with
+    shape (batch_size, height, width, channels) while channels_first corresponds to inputs
+    with shape (batch_size, channels, height, width).
+    """
+
+    def __init__(self, normalized_shape, eps=1e-6, data_format='channels_first'):
+        super().__init__()
+        self.weight = nn.Parameter(torch.ones(normalized_shape))
+        self.bias = nn.Parameter(torch.zeros(normalized_shape))
+        self.eps = eps
+        self.data_format = data_format
+        if self.data_format not in ['channels_last', 'channels_first']:
+            raise NotImplementedError
+        self.normalized_shape = (normalized_shape,)
+
+    def forward(self, x):
+        if self.data_format == 'channels_last':
+            return F.layer_norm(x, self.normalized_shape, self.weight, self.bias, self.eps)
+        elif self.data_format == 'channels_first':
+            input_dtype = x.dtype
+            x = x.to(torch.float32)
+            u = x.mean(1, keepdim=True)
+            s = (x - u).pow(2).mean(1, keepdim=True)
+            x = (x - u) / torch.sqrt(s + self.eps)
+            x = self.weight[:, None, None].to(torch.float32) * x + self.bias[:, None, None].to(torch.float32)
+            x = x.to(input_dtype)
+            return x
+
+
 def window_partition(x, window_size):
     """
     Args:
@@ -329,6 +360,7 @@ class BEiT(nn.Module):
                  hybrid_backbone=None, norm_layer=None, init_values=None, use_checkpoint=False,
                  use_abs_pos_emb=False, use_rel_pos_bias=True, use_shared_rel_pos_bias=False,
                  pretrained=None, with_cp=False, window_attn=False, window_size=14,
+                 with_fpn=False, use_simple_fpn=True, out_indices=[7, 11, 15, 23], output_dtype="float32"
     ):
         super().__init__()
         norm_layer = norm_layer or partial(nn.LayerNorm, eps=1e-6)
@@ -338,7 +370,19 @@ class BEiT(nn.Module):
         self.pretrain_img_size = pretrain_img_size
         self.pretrain_patch_size = pretrain_patch_size
         self.patch_size = patch_size
+        self.with_fpn = with_fpn
+        self.out_indices = out_indices
+        self.use_simple_fpn = use_simple_fpn
         self.pretrained = pretrained
+        
+        if output_dtype == 'float16':
+            self.output_dtype = torch.float16
+        elif output_dtype == 'bfloat16':
+            self.output_dtype = torch.bfloat16
+        elif output_dtype == 'float32':
+            self.output_dtype = torch.float32
+        else:
+            raise NotImplementedError
 
         window_attn = [window_attn] * depth if not isinstance(window_attn, list) else window_attn
         window_size = [window_size] * depth if not isinstance(window_size, list) else window_size
@@ -379,7 +423,23 @@ class BEiT(nn.Module):
             trunc_normal_(self.pos_embed, std=.02)
         self.apply(self._init_weights)
         self.init_weights(pretrained)
-
+        
+        if with_fpn:
+            self.up1 = nn.Sequential(*[
+                nn.ConvTranspose2d(embed_dim, embed_dim, 2, 2),
+                LayerNorm(embed_dim),
+                nn.GELU(),
+                nn.ConvTranspose2d(embed_dim, embed_dim, 2, 2),
+            ])
+            self.up2 = nn.Sequential(*[
+                nn.ConvTranspose2d(embed_dim, embed_dim, 2, 2),
+            ])
+            self.up3 = nn.Identity()
+            self.up4 = nn.MaxPool2d(kernel_size=2, stride=2)
+            self.up1.apply(self._init_weights)
+            self.up2.apply(self._init_weights)
+            self.up3.apply(self._init_weights)
+            self.up4.apply(self._init_weights)
 
     def init_weights(self, pretrained=None):
         """Initialize the weights in backbone.
@@ -408,6 +468,45 @@ class BEiT(nn.Module):
         elif isinstance(m, nn.LayerNorm):
             nn.init.constant_(m.bias, 0)
             nn.init.constant_(m.weight, 1.0)
+        elif isinstance(m, nn.Conv2d) or isinstance(m, nn.ConvTranspose2d):
+            fan_out = m.kernel_size[0] * m.kernel_size[1] * m.out_channels
+            fan_out //= m.groups
+            m.weight.data.normal_(0, math.sqrt(2.0 / fan_out))
+            if m.bias is not None:
+                m.bias.data.zero_()
 
     def get_num_layers(self):
         return len(self.blocks)
+    
+    @property
+    def dtype(self):
+        return self.patch_embed.proj.weight.dtype
+    
+    def forward_features(self, x):
+        x, H, W = self.patch_embed(x.type(self.dtype))
+        x = self.pos_drop(x)
+        
+        outs = list() 
+        for idx , blk in enumerate(self.blocks):
+            x = blk(x, H, W)
+            if idx in self.out_indices:
+                out = x
+                b, n, c = out.shape
+                out = out.reshape(b, H, W, c).permute(0, 3, 1, 2)
+                outs.append(out)
+
+        return outs
+    
+    def forward(self, x):
+        outs = self.forward_features(x)
+        if self.use_simple_fpn:
+            outs = [outs[-1]]
+        if not self.with_fpn:
+            return [item.contiguous().to(self.output_dtype) for item in outs]
+        else:
+            x1 = x2 = x3 = x4 = outs[-1]
+            f1 = self.up1(x1).to(self.output_dtype).contiguous()
+            f2 = self.up2(x2).to(self.output_dtype).contiguous()
+            f3 = self.up3(x3).to(self.output_dtype).contiguous()
+            f4 = self.up4(x4).to(self.output_dtype).contiguous()
+            return [f1, f2, f3, f4]
