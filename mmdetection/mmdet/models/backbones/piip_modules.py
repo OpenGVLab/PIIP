@@ -9,7 +9,6 @@ import warnings
 
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 
 try:
     from ops.deformable_attention.modules import MSDeformAttn
@@ -19,7 +18,7 @@ except:
     
 from timm.models.layers import DropPath
 import torch.utils.checkpoint as cp
-from .convnext_hf_wrapper import ConvNextLayerWrapper
+
 
 class Permute(nn.Module):
     def __init__(self, *dims):
@@ -224,15 +223,15 @@ class Injector(nn.Module):
 
 
 class BidirectionalInteractionUnit(nn.Module):
-    def __init__(self, branch1_dim, branch2_dim, branch1_feat_size, branch2_feat_size, 
+    def __init__(self, branch1_dim, branch2_dim, branch1_img_size, branch2_img_size, 
                  num_heads=6, n_points=4, norm_layer=partial(nn.LayerNorm, eps=1e-6),
                  drop=0., drop_path=0., with_cffn=False, cffn_ratio=0.25, 
                  deform_ratio=1.0, with_cp=False, attn_type='normal', 
                  with_proj=True):
         super().__init__()
         self.attn_type = attn_type
-        self.branch1_feat_size = branch1_feat_size # only for calculating flops
-        self.branch2_feat_size = branch2_feat_size
+        self.branch1_img_size = branch1_img_size
+        self.branch2_img_size = branch2_img_size
         self.branch1_dim = branch1_dim
         self.branch2_dim = branch2_dim
         
@@ -276,38 +275,20 @@ class BidirectionalInteractionUnit(nn.Module):
                                     feat=x1_branch1to2_proj, spatial_shapes=deform_inputs2[1],
                                     level_start_index=deform_inputs2[2], H=H2, W=W2) 
         return x1, x2
-
-def forward_blocks(x, H, W, blocks, cls_=None):
-    if len(blocks) == 0:
-        print("!!! no blocks")
-        return x, cls_
-    
-    if cls_ is not None:
-        x = torch.cat((cls_, x), dim=1)
         
-    if isinstance(blocks[0], ResNetLayerWrapper) or isinstance(blocks[0], ConvNextLayerWrapper):
-        for _, blk in enumerate(blocks):
-            x, H, W = blk(x, H, W)
-    else:
-        for _, blk in enumerate(blocks):
-            x = blk(x, H, W)
-    
-    if cls_ is not None:
-        cls_, x = x[:, :1, :], x[:, 1:, :]
-    return x, cls_, H, W
-     
+        
      
 class FourBranchInteractionBlock(nn.Module):
     def __init__(self, branch1_dim, branch2_dim, branch3_dim, branch4_dim, 
-                 branch1_feat_size, branch2_feat_size, branch3_feat_size, branch4_feat_size,
+                 branch1_img_size, branch2_img_size, branch3_img_size, branch4_img_size,
                  attn_type='deform', **kwargs):
         super().__init__()
         self.attn_type = attn_type
 
         
-        self.interaction_units_12 = BidirectionalInteractionUnit(branch1_dim, branch2_dim, branch1_feat_size, branch2_feat_size, attn_type=attn_type, **kwargs)
-        self.interaction_units_23 = BidirectionalInteractionUnit(branch2_dim, branch3_dim, branch2_feat_size, branch3_feat_size, attn_type=attn_type, **kwargs)
-        self.interaction_units_34 = BidirectionalInteractionUnit(branch3_dim, branch4_dim, branch3_feat_size, branch4_feat_size, attn_type=attn_type, **kwargs)
+        self.interaction_units_12 = BidirectionalInteractionUnit(branch1_dim, branch2_dim, branch1_img_size, branch2_img_size, attn_type=attn_type, **kwargs)
+        self.interaction_units_23 = BidirectionalInteractionUnit(branch2_dim, branch3_dim, branch2_img_size, branch3_img_size, attn_type=attn_type, **kwargs)
+        self.interaction_units_34 = BidirectionalInteractionUnit(branch3_dim, branch4_dim, branch3_img_size, branch4_img_size, attn_type=attn_type, **kwargs)
         
         # for calculating flops
         self.interaction_units = [
@@ -321,13 +302,22 @@ class FourBranchInteractionBlock(nn.Module):
         self.branch3_dim = branch3_dim
         self.branch4_dim = branch4_dim
     
+    def forward_vit_blocks(self, x, H, W, blocks, cls_=None):
+        if cls_ is not None:
+            x = torch.cat((cls_, x), dim=1)
+        for _, blk in enumerate(blocks):
+            x = blk(x, H, W)
+        if cls_ is not None:
+            cls_, x = x[:, :1, :], x[:, 1:, :]
+        return x, cls_
+    
     def forward(self, x1, x2, x3, x4, branch1_blocks, branch2_blocks, branch3_blocks, branch4_blocks,
                 H1, W1, H2, W2, H3, W3, H4, W4, deform_inputs=None, cls1=None, cls2=None, cls3=None, cls4=None):
         
-        x1, cls1, H1, W1 = forward_blocks(x1, H1, W1, branch1_blocks, cls1)
-        x2, cls2, H2, W2 = forward_blocks(x2, H2, W2, branch2_blocks, cls2)
-        x3, cls3, H3, W3 = forward_blocks(x3, H3, W3, branch3_blocks, cls3)
-        x4, cls4, H4, W4 = forward_blocks(x4, H4, W4, branch4_blocks, cls4)
+        x1, cls1 = self.forward_vit_blocks(x1, H1, W1, branch1_blocks, cls1)
+        x2, cls2 = self.forward_vit_blocks(x2, H2, W2, branch2_blocks, cls2)
+        x3, cls3 = self.forward_vit_blocks(x3, H3, W3, branch3_blocks, cls3)
+        x4, cls4 = self.forward_vit_blocks(x4, H4, W4, branch4_blocks, cls4)
         
         x3, x4 = self.interaction_units_34(x3, x4, deform_inputs["4to3"], deform_inputs["3to4"], H3, W3, H4, W4)
         x2, x3 = self.interaction_units_23(x2, x3, deform_inputs["3to2"], deform_inputs["2to3"], H2, W2, H3, W3)
@@ -338,13 +328,13 @@ class FourBranchInteractionBlock(nn.Module):
 
 class ThreeBranchInteractionBlock(nn.Module):
     def __init__(self, branch1_dim, branch2_dim, branch3_dim, 
-                 branch1_feat_size, branch2_feat_size, branch3_feat_size, 
+                 branch1_img_size, branch2_img_size, branch3_img_size, 
                  attn_type='deform', **kwargs):
         super().__init__()
         self.attn_type = attn_type
 
-        self.interaction_units_12 = BidirectionalInteractionUnit(branch1_dim, branch2_dim, branch1_feat_size, branch2_feat_size, attn_type=attn_type, **kwargs)
-        self.interaction_units_23 = BidirectionalInteractionUnit(branch2_dim, branch3_dim, branch2_feat_size, branch3_feat_size, attn_type=attn_type, **kwargs)
+        self.interaction_units_12 = BidirectionalInteractionUnit(branch1_dim, branch2_dim, branch1_img_size, branch2_img_size, attn_type=attn_type, **kwargs)
+        self.interaction_units_23 = BidirectionalInteractionUnit(branch2_dim, branch3_dim, branch2_img_size, branch3_img_size, attn_type=attn_type, **kwargs)
         
         # for calculating flops
         self.interaction_units = [
@@ -356,26 +346,35 @@ class ThreeBranchInteractionBlock(nn.Module):
         self.branch2_dim = branch2_dim
         self.branch3_dim = branch3_dim
     
+    def forward_vit_blocks(self, x, H, W, blocks, cls_=None):
+        if cls_ is not None:
+            x = torch.cat((cls_, x), dim=1)
+        for _, blk in enumerate(blocks):
+            x = blk(x, H, W)
+        if cls_ is not None:
+            cls_, x = x[:, :1, :], x[:, 1:, :]
+        return x, cls_
+    
     def forward(self, x1, x2, x3, branch1_blocks, branch2_blocks, branch3_blocks, 
                 H1, W1, H2, W2, H3, W3, deform_inputs=None, cls1=None, cls2=None, cls3=None):
-        x1, cls1, H1, W1 = forward_blocks(x1, H1, W1, branch1_blocks, cls1)
-        x2, cls2, H2, W2 = forward_blocks(x2, H2, W2, branch2_blocks, cls2)
-        x3, cls3, H3, W3 = forward_blocks(x3, H3, W3, branch3_blocks, cls3)
+        x1, cls1 = self.forward_vit_blocks(x1, H1, W1, branch1_blocks, cls1)
+        x2, cls2 = self.forward_vit_blocks(x2, H2, W2, branch2_blocks, cls2)
+        x3, cls3 = self.forward_vit_blocks(x3, H3, W3, branch3_blocks, cls3)
         
         x2, x3 = self.interaction_units_23(x2, x3, deform_inputs["3to2"], deform_inputs["2to3"], H2, W2, H3, W3)
         x1, x2 = self.interaction_units_12(x1, x2, deform_inputs["2to1"], deform_inputs["1to2"], H1, W1, H2, W2)
         
-        return x1, x2, x3, cls1, cls2, cls3, H1, W1, H2, W2, H3, W3
+        return x1, x2, x3, cls1, cls2, cls3
 
 
 class TwoBranchInteractionBlock(nn.Module):
     def __init__(self, branch1_dim, branch2_dim, 
-                 branch1_feat_size, branch2_feat_size, 
+                 branch1_img_size, branch2_img_size, 
                  attn_type='deform', **kwargs):
         super().__init__()
         self.attn_type = attn_type
 
-        self.interaction_units_12 = BidirectionalInteractionUnit(branch1_dim, branch2_dim, branch1_feat_size, branch2_feat_size, attn_type=attn_type, **kwargs)
+        self.interaction_units_12 = BidirectionalInteractionUnit(branch1_dim, branch2_dim, branch1_img_size, branch2_img_size, attn_type=attn_type, **kwargs)
         
         # for calculating flops
         self.interaction_units = [
@@ -385,10 +384,19 @@ class TwoBranchInteractionBlock(nn.Module):
         self.branch1_dim = branch1_dim
         self.branch2_dim = branch2_dim
     
+    def forward_vit_blocks(self, x, H, W, blocks, cls_=None):
+        if cls_ is not None:
+            x = torch.cat((cls_, x), dim=1)
+        for _, blk in enumerate(blocks):
+            x = blk(x, H, W)
+        if cls_ is not None:
+            cls_, x = x[:, :1, :], x[:, 1:, :]
+        return x, cls_
+    
     def forward(self, x1, x2, branch1_blocks, branch2_blocks, 
                 H1, W1, H2, W2, deform_inputs=None, cls1=None, cls2=None):
-        x1, cls1, H1, W1 = forward_blocks(x1, H1, W1, branch1_blocks, cls1)
-        x2, cls2, H2, W2 = forward_blocks(x2, H2, W2, branch2_blocks, cls2)
+        x1, cls1 = self.forward_vit_blocks(x1, H1, W1, branch1_blocks, cls1)
+        x2, cls2 = self.forward_vit_blocks(x2, H2, W2, branch2_blocks, cls2)
         
         x1, x2 = self.interaction_units_12(x1, x2, deform_inputs["2to1"], deform_inputs["1to2"], H1, W1, H2, W2)
         

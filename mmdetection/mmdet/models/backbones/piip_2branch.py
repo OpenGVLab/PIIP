@@ -78,8 +78,8 @@ class PIIPTwoBranch(nn.Module):
             TwoBranchInteractionBlock(
                 branch1_dim=self.branch1.embed_dim,
                 branch2_dim=self.branch2.embed_dim,
-                branch1_feat_size=self.branch1.pretrain_img_size // 16,
-                branch2_feat_size=self.branch2.pretrain_img_size // 16,
+                branch1_img_size=self.branch1.pretrain_img_size,
+                branch2_img_size=self.branch2.pretrain_img_size,
                 num_heads=deform_num_heads, n_points=n_points,
                 drop_path=interaction_drop_path_rate,
                 norm_layer=norm_layer, with_cffn=with_cffn,
