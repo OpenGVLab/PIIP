@@ -223,6 +223,7 @@ class UnifiedBertEncoder(nn.Module):
         self.pretrain_img_size = pretrain_img_size
         self.pretrain_patch_size = pretrain_patch_size
         self.pretrained = pretrained
+        self.patch_size = patch_size
 
         window_attn = [window_attn] * depth if not isinstance(window_attn, list) else window_attn
         window_size = [window_size] * depth if not isinstance(window_size, list) else window_size

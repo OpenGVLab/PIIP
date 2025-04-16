@@ -273,18 +273,6 @@ class PIIPThreeBranch(nn.Module):
         
         out_dim = dim1
         self.is_dino = is_dino
-        if not is_dino:
-            self.fpn1 = nn.Sequential(
-                nn.ConvTranspose2d(out_dim, out_dim, 2, 2),
-                nn.GroupNorm(32, out_dim),
-                nn.GELU(),
-                nn.ConvTranspose2d(out_dim, out_dim, 2, 2)
-            )
-            self.fpn1.apply(self._init_weights) 
-            
-        self.fpn2 = nn.Sequential(nn.ConvTranspose2d(out_dim, out_dim, 2, 2))
-        self.fpn3 = nn.Sequential(nn.Identity())
-        self.fpn4 = nn.Sequential(nn.MaxPool2d(kernel_size=2, stride=2))
 
 
         self.fpn2.apply(self._init_weights)
@@ -545,8 +533,4 @@ class PIIPThreeBranch(nn.Module):
             f4 = self.fpn4(outs[3]).contiguous().float()
              
         
-        assert f1.shape[-1] == x.shape[-1] / 4, f"{f1.shape=}, {x.shape=}"
-        assert f2.shape[-1] == x.shape[-1] / 8, f"{f2.shape=}, {x.shape=}"
-        assert f3.shape[-1] == x.shape[-1] / 16, f"{f3.shape=}, {x.shape=}"
-        assert f4.shape[-1] == x.shape[-1] / 32, f"{f4.shape=}, {x.shape=}"
         return [f1, f2, f3, f4]

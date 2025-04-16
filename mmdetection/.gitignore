@@ -129,3 +129,5 @@ docs/modelzoo_statistics.md
 /flops.txt
 /pretrained
 /tools/slurm_train_test.sh
+wandb/
+/work_dir/

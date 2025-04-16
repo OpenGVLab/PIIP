@@ -387,4 +387,4 @@ r = 1.75
 custom_imports = dict(imports=['mmcv_custom'], allow_failed_imports=False)
 work_dir = './work_dir/'
 auto_resume = False
-gpu_ids = range(0, 8)
+gpu_ids = range(0, 1)

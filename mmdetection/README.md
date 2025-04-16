@@ -47,11 +47,12 @@ The released model weights are provided in [**the parent folder**](../README.md)
 
   ```bash
   conda install -c conda-forge termcolor yacs pyyaml scipy pip -y
-  pip install opencv-python scipy matplotlib addict
+  pip install opencv-python scipy matplotlib addict 
   pip install transformers==4.44.1
   pip install numpy==1.26.4
   pip install timm==0.6.11
   pip install yapf==0.40.1
+  pip install wandb==0.17.7
   pip install deepspeed==0.8.0 # please install this old version
   pip install pydantic==1.10.2 # later versions may have compatibility issues
   pip install future tensorboard
@@ -135,11 +136,14 @@ To evaluate PIIP-H6B Mask R-CNN on COCO val2017 on a single node with a single g
 
 ```bash
 # w/ deepspeed
-python tools/test.py configs/piip/2branch/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms work_dirs/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms/iter_87961/global_step87960 --eval bbox segm
-# w/ deepspeed and set `deepspeed=False` in the configuration file
-python tools/test.py configs/piip/2branch/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms work_dirs/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms/iter_87961/global_step87960/mp_rank_00_model_states.pt --eval bbox segm
+python tools/test.py configs/piip/2branch/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms.py work_dirs/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms/iter_87961/global_step87960 --eval bbox segm
+# w/ deepspeed
+python tools/test.py configs/piip/2branch/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms.py work_dirs/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms/iter_87961/global_step87960/mp_rank_00_model_states.pt --eval bbox segm --disable_deepspeed
 # w/o deepspeed
-python tools/test.py configs/piip/2branch/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms work_dirs/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms.pth --eval bbox segm
+python tools/test.py configs/piip/2branch/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms.py work_dirs/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms.pth --eval bbox segm --disable_deepspeed
+
+# slurm
+GPUS=8 sh tools/slurm_test.sh <partition> <job-name> configs/piip/2branch/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms work_dirs/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms.pth --eval bbox segm --disable_deepspeed
 ```
 
 To evaluate PIIP-H6B Mask R-CNN on COCO val2017 on a single node with 8 gpus:
