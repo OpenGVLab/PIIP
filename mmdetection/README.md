@@ -32,12 +32,14 @@ The released model weights are provided in [**the parent folder**](../README.md)
   This is because different versions of flash attention yield slight differences in results.
 
   ```bash
+  # install with pip
+  pip install flash_attn==0.2.8
+  # or build from source (with FusedMLP)
   git clone https://github.com/Dao-AILab/flash-attention.git
   cd flash-attention
   git checkout v0.2.8
   pip install ninja
   python setup.py install # I use gcc-7.3 to compile this package
-  # for FusedMLP
   cd csrc/fused_dense_lib
   pip install .
   ```
@@ -45,10 +47,12 @@ The released model weights are provided in [**the parent folder**](../README.md)
 
   ```bash
   conda install -c conda-forge termcolor yacs pyyaml scipy pip -y
-  pip install opencv-python
+  pip install opencv-python scipy matplotlib addict 
+  pip install transformers==4.44.1
+  pip install numpy==1.26.4
   pip install timm==0.6.11
   pip install yapf==0.40.1
-  pip install addict
+  pip install wandb==0.17.7
   pip install deepspeed==0.8.0 # please install this old version
   pip install pydantic==1.10.2 # later versions may have compatibility issues
   pip install future tensorboard
@@ -116,12 +120,12 @@ Note: the core model code is under `mmdet/models/backbones/`.
 
 ## Training
 
-To train PIIP-TSB Mask R-CNN on COCO train2017 on a single node with 8 gpus for 12 epochs run:
+To train PIIP-TSB Mask R-CNN on COCO train2017 on a single node with 8 gpus for 12 epochs:
 
 ```bash
 sh tools/dist_train.sh configs/piip/3branch/mask_rcnn_beit_tsb_1120_896_448_fpn_1x_coco_bs16.py 8
 # or manage jobs with slurm
-GPUS=8 sh tools/slurm_train.sh <partition> <job-name> configs/piip/3branch/mask_rcnn_beit_tsb_1120_896_448_fpn_1x_coco_bs16.py
+GPUS=8 sh tools/slurm_train.sh <partition> <job-name> configs/piip/3branch/mask_rcnn_beit_tsb_1120_896_448_fpn_1x_coco_bs16.py ./work_dir/
 ```
 
 **Note**: You can modify the `deepspeed` parameter in the configuration file to decide whether to use deepspeed. If you want to resume the deepspeed pretrained model for finetuning, you need to set `deepspeed_load_module_only=True` in the config.
@@ -132,23 +136,27 @@ To evaluate PIIP-H6B Mask R-CNN on COCO val2017 on a single node with a single g
 
 ```bash
 # w/ deepspeed
-python tools/test.py configs/piip/2branch/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms work_dirs/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms/iter_87961/global_step87960 --eval bbox segm
-# w/ deepspeed and set `deepspeed=False` in the configuration file
-python tools/test.py configs/piip/2branch/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms work_dirs/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms/iter_87961/global_step87960/mp_rank_00_model_states.pt --eval bbox segm
+python tools/test.py configs/piip/2branch/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms.py work_dirs/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms/iter_87961/global_step87960 --eval bbox segm
+# w/ deepspeed
+python tools/test.py configs/piip/2branch/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms.py work_dirs/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms/iter_87961/global_step87960/mp_rank_00_model_states.pt --eval bbox segm --disable_deepspeed
 # w/o deepspeed
-python tools/test.py configs/piip/2branch/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms work_dirs/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms.pth --eval bbox segm
+python tools/test.py configs/piip/2branch/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms.py work_dirs/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms.pth --eval bbox segm --disable_deepspeed
+
+# slurm
+GPUS=8 sh tools/slurm_test.sh <partition> <job-name> configs/piip/2branch/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms work_dirs/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms.pth --eval bbox segm --disable_deepspeed
 ```
 
 To evaluate PIIP-H6B Mask R-CNN on COCO val2017 on a single node with 8 gpus:
 
 ```bash
+# w/o deepspeed
+# download the pth to `work_dirs/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms/`
+sh tools/dist_test.sh configs/piip/2branch/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms work_dirs/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms.pth 8 --eval bbox segm
+
 # w/ deepspeed
 sh tools/dist_test.sh configs/piip/2branch/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms work_dirs/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms/iter_87961/global_step87960 8 --eval bbox segm
 # w/ deepspeed and set `deepspeed=False` in the configuration file
 sh tools/dist_test.sh configs/piip/2branch/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms work_dirs/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms/iter_87961/global_step87960/mp_rank_00_model_states.pt 8 --eval bbox segm
-# w/o deepspeed
-sh tools/dist_test.sh configs/piip/2branch/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms work_dirs/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms/mask_rcnn_internvit_h6b_1024_512_fpn_1x_coco_bs16_ms.pth 8 --eval bbox segm
-
 ```
 
 This should give
@@ -214,13 +222,10 @@ To run object detection and instance segmentation with Mask R-CNN, use
 
 ## FLOPs calculation
 
-We provide a simple script to calculate the number of FLOPs. Change the `config_list` in `../classification/get_flops.py` and run
+We provide a simple script to calculate the number of FLOPs. Change the `config_list` in `get_flops_det.py` and run:
 
 ```bash
-# use the classification environment
-conda activate piip_cls
-cd ../classification/
-python get_flops.py
+python get_flops_det.py
 ```
 
 Then the FLOPs and number of parameters are recorded in `flops.txt`.

@@ -11,37 +11,19 @@ _base_ = [
 ]
 deepspeed = True
 deepspeed_config = 'zero_configs/adam_zero1_bf16.json'
-pretrained = './pretrained/deit_3_base_224_21k.pth'
+
 model = dict(
     backbone=dict(
         _delete_=True,
-        type='vit_models',
-        pretrain_img_size=224,
-        pretrain_patch_size=16,
-        patch_size=16,
-        embed_dim=768,
-        depth=12,
-        num_heads=12,
-        mlp_ratio=4.,
-        qkv_bias=True,
-        drop_path_rate=0.15,
-        init_scale=1,
-        with_fpn=True,
-        out_indices=[11],
-        output_dtype='float32',
-        window_attn=[True, True, False,
-                    True, True, False,
-                    True, True, False,
-                    True, True, False,],
-        window_size=[14, 14, -1,
-                    14, 14, -1,
-                    14, 14, -1,
-                    14, 14, -1],
-        use_flash_attn=True,
-        pretrained=pretrained),
+        type='ConvNextHFWrapper',
+        real_size=1024,
+        with_simple_fpn=False,
+        pretrained="facebook/convnext-base-224",
+        single_branch=True,
+    ),
     neck=dict(
         type='FPN',
-        in_channels=[768, 768, 768, 768],
+        in_channels=[128, 256, 512, 1024],
         out_channels=256,
         num_outs=5))
 # By default, models are trained on 8 GPUs with 2 images per GPU
@@ -82,8 +64,6 @@ data = dict(
     test=dict(pipeline=test_pipeline)
 )
 optimizer = dict(_delete_=True, type='AdamW', lr=0.0001, betas=(0.9, 0.999), weight_decay=0.05,
-                 constructor='CustomLayerDecayOptimizerConstructorMMDet',
-                 paramwise_cfg=dict(num_layers=12, layer_decay_rate=0.95)
                  )
 optimizer_config = dict(grad_clip=None)
 if deepspeed:
@@ -104,3 +84,20 @@ if deepspeed:
             type='ToBFloat16HookMMDet',
             priority=49),
     ]
+
+log_config = dict(
+    interval=50,
+    hooks=[
+        # dict(type='TextLoggerHook'),
+        dict(
+            type='MMDetWandbHook',
+            init_kwargs=dict(project='',
+                            name="",
+                            tags=[]),
+            interval=50,
+            log_checkpoint=False,
+            log_checkpoint_metadata=False,
+            num_eval_images=0
+        )
+    ]
+)

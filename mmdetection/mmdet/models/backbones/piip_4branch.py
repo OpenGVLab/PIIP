@@ -40,7 +40,8 @@ class PIIPFourBranch(nn.Module):
                  branch2={},
                  branch3={},
                  branch4={},
-                 pretrained=None
+                 pretrained=None,
+                 cal_flops=False,
                  ):
         
         super().__init__()
@@ -49,6 +50,11 @@ class PIIPFourBranch(nn.Module):
             norm_layer = nn.Identity
         
         self.interact_attn_type = interact_attn_type
+        self.cal_flops = cal_flops
+        branch1 = branch1.copy()
+        branch2 = branch2.copy()
+        branch3 = branch3.copy()
+        branch4 = branch4.copy()
         
         self.w1 = nn.Parameter(torch.tensor(1.0), requires_grad=True)
         self.w2 = nn.Parameter(torch.tensor(1.0), requires_grad=True)
@@ -76,10 +82,10 @@ class PIIPFourBranch(nn.Module):
                 branch2_dim=self.branch2.embed_dim,
                 branch3_dim=self.branch3.embed_dim, 
                 branch4_dim=self.branch4.embed_dim, 
-                branch1_img_size=self.branch1.pretrain_img_size,
-                branch2_img_size=self.branch2.pretrain_img_size,
-                branch3_img_size=self.branch3.pretrain_img_size, 
-                branch4_img_size=self.branch4.pretrain_img_size,  
+                branch1_feat_size=self.branch1.pretrain_img_size // 16,
+                branch2_feat_size=self.branch2.pretrain_img_size // 16,
+                branch3_feat_size=self.branch3.pretrain_img_size // 16,
+                branch4_feat_size=self.branch4.pretrain_img_size // 16,
                 num_heads=deform_num_heads, n_points=n_points,
                 drop_path=interaction_drop_path_rate,
                 norm_layer=norm_layer, with_cffn=with_cffn,
@@ -315,7 +321,9 @@ class PIIPFourBranch(nn.Module):
         x4 = self.merge_branch4(x4)
         
         out = x1 * self.w1 + x2 * self.w2 + x3 * self.w3 + x4 * self.w4
-             
+        
+        if self.cal_flops:
+            return
         
         # Outputs for fpn
         if not self.is_dino:

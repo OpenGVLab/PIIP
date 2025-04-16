@@ -109,6 +109,12 @@ def parse_args():
         default='none',
         help='job launcher')
     parser.add_argument('--local_rank', type=int, default=0)
+    
+    parser.add_argument(
+        '--disable_deepspeed',
+        action='store_true',)
+    
+    
     args = parser.parse_args()
     if 'LOCAL_RANK' not in os.environ:
         os.environ['LOCAL_RANK'] = str(args.local_rank)
@@ -228,7 +234,7 @@ def main():
     fp16_cfg = cfg.get('fp16', None)
     if fp16_cfg is not None:
         wrap_fp16_model(model)
-    if not cfg.deepspeed:
+    if args.disable_deepspeed or (not cfg.deepspeed):
         checkpoint = load_checkpoint(model, args.checkpoint, map_location='cpu')
         if args.fuse_conv_bn:
             model = fuse_conv_bn(model)
@@ -244,7 +250,7 @@ def main():
         outputs = single_gpu_test(model, data_loader, args.show, args.show_dir,
                                   args.show_score_thr)
     else:
-        if cfg.deepspeed:
+        if (not args.disable_deepspeed) and cfg.deepspeed:
             model = build_ZeROddp_inference(model=model, 
                                             mp_size=1, 
                                             dtype=torch.half, 

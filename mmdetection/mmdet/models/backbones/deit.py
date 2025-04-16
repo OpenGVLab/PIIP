@@ -532,7 +532,7 @@ class vit_models(BaseModule):
                  init_scale=1e-4, window_size=None, window_attn=None,
                  output_dtype="float32", pretrained=None,
                  out_indices=[7, 11, 15, 23], with_fpn=False, use_simple_fpn=True,
-                 use_flash_attn=False, with_cp=False):
+                 use_flash_attn=False, with_cp=False, cal_flops=False,):
 
         super().__init__()
         
@@ -698,19 +698,3 @@ class vit_models(BaseModule):
             f4 = self.up4(x4).to(self.output_dtype).contiguous()
             return [f1, f2, f3, f4]
 
-    
-    def forward_for_attn_map_visualize(self, x, interaction_layer=-1, return_attn=True):
-        x, H, W = self.patch_embed(x.type(self.dtype))
-        pos_embed = self._get_pos_embed(self.pos_embed, H, W)
-        x = self.pos_drop(x + pos_embed)
-        
-        last_layer_index = len(self.blocks) + interaction_layer
-        for _ , blk in enumerate(self.blocks[:last_layer_index + 1]):
-            if return_attn:
-                x, attn = blk(x, return_attn=return_attn)
-            else:
-                x = blk(x, return_attn=return_attn)
-
-        if return_attn:
-            return x, H, W, attn
-        return x, H, W

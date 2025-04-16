@@ -214,7 +214,7 @@ class UnifiedBertEncoder(nn.Module):
     def __init__(self, pretrain_img_size=224, patch_size=16, pretrain_patch_size=16, in_chans=3, embed_dim=768, depth=12,
                  num_heads=12, mlp_ratio=4., drop_path_rate=0., norm_layer=nn.LayerNorm,
                  embed_layer=VisualPatchEmbedding, window_attn=False, window_size=14,
-                 with_cp=False, pretrained=None):
+                 with_cp=False, pretrained=None, cal_flops=False):
 
         super(UnifiedBertEncoder, self).__init__()
         self.embed_dim = embed_dim
@@ -223,6 +223,7 @@ class UnifiedBertEncoder(nn.Module):
         self.pretrain_img_size = pretrain_img_size
         self.pretrain_patch_size = pretrain_patch_size
         self.pretrained = pretrained
+        self.patch_size = patch_size
 
         window_attn = [window_attn] * depth if not isinstance(window_attn, list) else window_attn
         window_size = [window_size] * depth if not isinstance(window_size, list) else window_size

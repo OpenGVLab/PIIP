@@ -339,6 +339,7 @@ class Block(nn.Module):
         if mlp_type == "regular":
             self.mlp = Mlp(in_features=dim, hidden_features=mlp_hidden_dim, act_layer=act_layer, drop=drop)
         elif mlp_type == "fused_mlp":
+            assert FusedMLP is not None, "FusedMLP is not installed, please install it first."
             self.mlp = FusedMLP(in_features=dim, hidden_features=mlp_hidden_dim, activation="gelu_approx")
         else:
             raise NotImplementedError(mlp_type)
@@ -396,7 +397,7 @@ class InternViT6B(BaseModule):
                  use_flash_attn=True, with_cp=True, layerscale_force_fp32=False, out_indices=[7, 11, 15, 23],
                  with_fpn=False, with_final_norm=False, window_attn=False, window_size=14,
                  output_dtype="float32", pretrained=None, norm_layer_type='RMSNorm', use_simple_fpn=True,
-                 mlp_type="regular", **kwargs):
+                 mlp_type="regular", cal_flops=False, **kwargs):
 
         super().__init__()
 
