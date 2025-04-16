@@ -222,13 +222,10 @@ To run object detection and instance segmentation with Mask R-CNN, use
 
 ## FLOPs calculation
 
-We provide a simple script to calculate the number of FLOPs. Change the `config_list` in `../classification/get_flops.py` and run
+We provide a simple script to calculate the number of FLOPs. Change the `config_list` in `get_flops_det.py` and run:
 
 ```bash
-# use the classification environment
-conda activate piip_cls
-cd ../classification/
-python get_flops.py
+python get_flops_det.py
 ```
 
 Then the FLOPs and number of parameters are recorded in `flops.txt`.

@@ -242,6 +242,7 @@ def main(config_name, out_file=None):
 
 if __name__ == "__main__":
     config_list = [
+        "configs/piip/4branch/*.py",
         "configs/piip/convnext/*.py",
     ]
     
