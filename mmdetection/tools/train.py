@@ -1,7 +1,4 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-# import sys
-# sys.path.append("./mmdet/")
-
 import argparse
 import copy
 import os

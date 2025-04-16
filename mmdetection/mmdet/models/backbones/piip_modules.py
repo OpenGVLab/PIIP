@@ -369,7 +369,7 @@ class ThreeBranchInteractionBlock(nn.Module):
         x2, x3 = self.interaction_units_23(x2, x3, deform_inputs["3to2"], deform_inputs["2to3"], H2, W2, H3, W3)
         x1, x2 = self.interaction_units_12(x1, x2, deform_inputs["2to1"], deform_inputs["1to2"], H1, W1, H2, W2)
         
-        return x1, x2, x3, cls1, cls2, cls3
+        return x1, x2, x3, cls1, cls2, cls3, H1, W1, H2, W2, H3, W3
 
 
 class TwoBranchInteractionBlock(nn.Module):
