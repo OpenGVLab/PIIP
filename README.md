@@ -3,7 +3,7 @@
 [![PaperWithCode](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/parameter-inverted-image-pyramid-networks/semantic-segmentation-on-ade20k)](https://paperswithcode.com/sota/semantic-segmentation-on-ade20k?p=parameter-inverted-image-pyramid-networks) 	
 [![PaperWithCode](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/parameter-inverted-image-pyramid-networks/object-detection-on-coco)](https://paperswithcode.com/sota/object-detection-on-coco?p=parameter-inverted-image-pyramid-networks)
 
- ([PIIP_v1 Paper](https://arxiv.org/abs/2406.04330) and [PIIP_v2 Paper](https://arxiv.org/abs/2501.07783)) [[中文解读]](https://zhuanlan.zhihu.com/p/705734540) [[Slides]](https://www.wzk.plus/slides/PIIP_slides.pdf) [[Video]](https://youtu.be/Kdh3CNp8bfg)
+ [[PIIP_v1 Paper]](https://arxiv.org/abs/2406.04330) [[PIIP_v2 Paper]](https://arxiv.org/abs/2501.07783) [[中文解读]](https://zhuanlan.zhihu.com/p/705734540) [[Slides]](https://www.wzk.plus/slides/PIIP_slides.pdf) [[Video]](https://youtu.be/Kdh3CNp8bfg)
 
 
 
