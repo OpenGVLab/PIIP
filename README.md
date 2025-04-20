@@ -3,17 +3,21 @@
 [![PaperWithCode](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/parameter-inverted-image-pyramid-networks/semantic-segmentation-on-ade20k)](https://paperswithcode.com/sota/semantic-segmentation-on-ade20k?p=parameter-inverted-image-pyramid-networks) 	
 [![PaperWithCode](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/parameter-inverted-image-pyramid-networks/object-detection-on-coco)](https://paperswithcode.com/sota/object-detection-on-coco?p=parameter-inverted-image-pyramid-networks)
 
-[[Paper]](https://arxiv.org/abs/2406.04330) [[中文解读]](https://zhuanlan.zhihu.com/p/705734540) [[Slides]](https://www.wzk.plus/slides/PIIP_slides.pdf) [[Video]](https://youtu.be/Kdh3CNp8bfg)
+ ([PIIP_v1 Paper](https://arxiv.org/abs/2406.04330) and [PIIP_v2 Paper](https://arxiv.org/abs/2501.07783)) [[中文解读]](https://zhuanlan.zhihu.com/p/705734540) [[Slides]](https://www.wzk.plus/slides/PIIP_slides.pdf) [[Video]](https://youtu.be/Kdh3CNp8bfg)
 
 
 
-The official implementation of the paper "[Parameter-Inverted Image Pyramid Networks](https://arxiv.org/abs/2406.04330)" 
+The official implementation of Parameter-Inverted Image Pyramid Networks.
 
 **NeurIPS 2024 Spotlight (Top 2.08%)**
 
 
 
 ## 📰 News
+
+[2025/4/20] [Code](https://github.com/OpenGVLab/PIIP/tree/main/llava) and [models](https://huggingface.co/collections/OpenGVLab/piip-6804939a32e695f42cf3f227) of PIIP-LLaVA are released!
+
+[2025/4/16] ConvNeXt-based detection models in [PIIP_v2](https://arxiv.org/abs/2501.07783) are released.
 
 [2025/1/15] We introduce **PIIP-LLaVA**, an MLLM that uses PIIP design to improve performance and save computational costs. We also extend PIIP to CNN-based structures and ViT-CNN hybrid structures. Code and models will be released soon. Check out our new **[paper](https://arxiv.org/abs/2501.07783)** for details.
 
@@ -60,6 +64,7 @@ For instructions on installation, pretrained models, training and evaluation, pl
 - [mmdetection](mmdetection/README.md)
 - [mmsegmentation](mmsegmentation/README.md)
 - [classification](classification/README.md)
+- [llava](llava/README.md)
 
 ## 🚀 Released Models
 
@@ -145,13 +150,6 @@ Will be released soon
 
 
 
-## 📅 Schedule
-
-* [X]  detection code
-* [X]  classification code
-* [x]  segmentation code
-* [ ]  multimodal understanding code
-
 ## 🖊️ Citation
 
 If you find this work helpful for your research, please consider giving this repo a star ⭐ and citing our paper:
@@ -178,4 +176,4 @@ This project is released under the [MIT license](LICENSE). Parts of this project
 
 ## 🙏 Acknowledgements
 
-Our code is built with reference to the code of the following projects: [InternVL-MMDetSeg](https://github.com/OpenGVLab/InternVL-MMDetSeg), [ViT-Adapter](https://github.com/czczup/ViT-Adapter),  [DeiT](https://github.com/facebookresearch/deit), [MMDetection](https://github.com/open-mmlab/mmdetection), [MMSegmentation](https://github.com/open-mmlab/mmsegmentation), and [timm](https://github.com/huggingface/pytorch-image-models). Thanks for their awesome work!
+Our code is built with reference to the code of the following projects: [LLaVA-1.5](https://github.com/haotian-liu/LLaVA), [InternVL-MMDetSeg](https://github.com/OpenGVLab/InternVL-MMDetSeg), [ViT-Adapter](https://github.com/czczup/ViT-Adapter),  [DeiT](https://github.com/facebookresearch/deit), [MMDetection](https://github.com/open-mmlab/mmdetection), [MMSegmentation](https://github.com/open-mmlab/mmsegmentation), and [timm](https://github.com/huggingface/pytorch-image-models). Thanks for their awesome work!
