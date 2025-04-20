@@ -2,7 +2,7 @@
 
 This folder contains code for PIIP-LLaVA, developed on top of [LLaVA-1.5](https://github.com/haotian-liu/LLaVA).
 
-The released model weights are provided in [**the parent folder**](../README.md) and [**Huggingface**](https://huggingface.co/collections/OpenGVLab/piip-6804939a32e695f42cf3f227).
+The released model weights are provided in [**the parent folder**](../README.md) and on [**Huggingface**](https://huggingface.co/collections/OpenGVLab/piip-6804939a32e695f42cf3f227).
 
 
 # Installation
@@ -106,8 +106,12 @@ Training runs on 8 A100 (80G) GPUs. If OOM is encountered, try Zero3 or larger `
 To use slurm for training, change `torchrun --nproc_per_node=8 --master_port=12345 llava/train/train_mem.py` in the scripts to `srun -p xxx --job-name=xxx --gres=gpu:8 --ntasks-per-node=1 --cpus-per-task=12 --ntasks=1 --kill-on-bad-exit=1 deepspeed llava/train/train_mem.py`.
 
 > [!Note]
-> `transformers<4.49.0` automatically changes the keys with name `gamma` to `weight` when loading pretrained models, but ConvNeXt in timm uses `gamma` as a parameter. 
-> To fix this legacy issue, we use a [monkey patch](llava/model/timm_convnext_monkey_patch.py) to change the parameter name in timm. 
+> A compatibility issue is fixed with monkey patch:
+> 
+> `transformers<4.49.0` automatically changes the keys with name `gamma` to `weight` when loading pretrained models ([code](https://github.com/huggingface/transformers/blob/345b9b1a6a308a1fa6559251eb33ead2211240ac/src/transformers/modeling_utils.py#L4002-L4003)), but ConvNeXt models in timm use `gamma` as a parameter.
+> 
+> To fix this legacy issue, we use a [monkey patch](llava/model/timm_convnext_monkey_patch.py) to change the parameter name in timm.
+> 
 > This may also be solved by using `transformers>=4.49.0`, but our pretrained models and the original LLaVA-1.5 is based on `transformers==4.37.2`, and newer version could potentially leads to other issues.
 
 ## Evaluation
