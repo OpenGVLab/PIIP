@@ -67,7 +67,7 @@ python visualize_seg.py --config_file configs/piip/2branch/upernet_internvit_h6b
 ```
 
 
-## FLOPs calculation
+## FLOPs Calculation
 
 We provide a simple script to calculate the number of FLOPs. Change the `config_list` in `../classification/get_flops.py` and run
 
@@ -89,5 +89,12 @@ If you find this work helpful for your research, please consider giving this rep
   author={Zhu, Xizhou and Yang, Xue and Wang, Zhaokai and Li, Hao and Dou, Wenhan and Ge, Junqi and Lu, Lewei and Qiao, Yu and Dai, Jifeng},
   journal={arXiv preprint arXiv:2406.04330},
   year={2024}
+}
+
+@article{piip_v2,
+  title={Parameter-Inverted Image Pyramid Networks for Visual Perception and Multimodal Understanding},
+  author={Wang, Zhaokai and Zhu, Xizhou and Yang, Xue and Luo, Gen and Li, Hao and Tian, Changyao and Dou, Wenhan and Ge, Junqi and Lu, Lewei and Qiao, Yu and Dai, Jifeng},
+  journal={arXiv preprint arXiv:2501.07783},
+  year={2025}
 }
 ```

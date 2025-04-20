@@ -6,30 +6,28 @@ The released model weights are provided in [**the parent folder**](../README.md)
 
 ## Installation
 
-- Clone this repo:
+1. Clone this repo:
 
   ```bash
   git clone https://github.com/OpenGVLab/PIIP
   cd PIIP/
   ```
-- Create a conda virtual environment and activate it:
+2. Create a conda virtual environment and activate it:
 
   ```bash
   conda create -n piip python=3.9 -y
   conda activate piip
   ```
-- Install `PyTorch>=1.11<2.0` and `torchvision>=0.13.0` with `CUDA>=10.2`:
+3. Install `PyTorch>=1.11<2.0` and `torchvision>=0.13.0` with `CUDA>=10.2`:
 
   For example, to install torch==1.12.0 with CUDA==11.3:
 
   ```bash
   pip install torch==1.12.0+cu113 torchvision==0.13.0+cu113 torchaudio==0.12.0 --extra-index-url https://download.pytorch.org/whl/cu113
   ```
-- Install `flash-attn==0.2.8` :
+4. Install `flash-attn==0.2.8` :
 
-  If you want to fully replicate my results, please install `v0.2.8`, otherwise install the latest version.
-
-  This is because different versions of flash attention yield slight differences in results.
+  If you want to fully replicate my results, please install `v0.2.8`, otherwise install the latest version. This is because different versions of flash attention yield slight differences in results.
 
   ```bash
   # install with pip
@@ -43,7 +41,7 @@ The released model weights are provided in [**the parent folder**](../README.md)
   cd csrc/fused_dense_lib
   pip install .
   ```
-- Install other requirements:
+5. Install other requirements:
 
   ```bash
   conda install -c conda-forge termcolor yacs pyyaml scipy pip -y
@@ -57,7 +55,7 @@ The released model weights are provided in [**the parent folder**](../README.md)
   pip install pydantic==1.10.2 # later versions may have compatibility issues
   pip install future tensorboard
   ```
-- Install our customized `mmcv-full==1.7.0`:
+6. Install our customized `mmcv-full==1.7.0`:
 
   ```bash
   cd mmcv/
@@ -65,7 +63,7 @@ The released model weights are provided in [**the parent folder**](../README.md)
   python setup.py develop
   cd ../
   ```
-- Install our customized mmdetection & mmsegmentation:
+7. Install our customized mmdetection & mmsegmentation:
 
   ```bash
   cd mmdetection/
@@ -75,13 +73,13 @@ The released model weights are provided in [**the parent folder**](../README.md)
   python setup.py develop
   cd ../
   ```
-- Compile the deformable attention:
+8. Compile the deformable attention:
 
   ```bash
   cd mmdetection/ops
   sh compile.sh
   ```
-- Selectively download pretrained ViT weights from [DeiT](https://github.com/facebookresearch/deit/blob/main/README_deit.md), [DeiT III](https://github.com/facebookresearch/deit/blob/main/README_revenge.md), [MAE](https://github.com/facebookresearch/mae), [InternVL](https://github.com/OpenGVLab/InternVL-MMDetSeg/blob/main/mmsegmentation/README.md), [BEiTv2](https://github.com/microsoft/unilm/tree/master/beit2), [DINOv2](https://github.com/facebookresearch/dinov2), [AugReg](https://github.com/google-research/vision_transformer) and [Uni-Perceiver](https://github.com/fundamentalvision/Uni-Perceiver):
+9. Selectively download pretrained ViT weights from [DeiT](https://github.com/facebookresearch/deit/blob/main/README_deit.md), [DeiT III](https://github.com/facebookresearch/deit/blob/main/README_revenge.md), [MAE](https://github.com/facebookresearch/mae), [InternVL](https://github.com/OpenGVLab/InternVL-MMDetSeg/blob/main/mmsegmentation/README.md), [BEiTv2](https://github.com/microsoft/unilm/tree/master/beit2), [DINOv2](https://github.com/facebookresearch/dinov2), [AugReg](https://github.com/google-research/vision_transformer) and [Uni-Perceiver](https://github.com/fundamentalvision/Uni-Perceiver):
 
   ```bash
   mkdir mmdetection/pretrained
@@ -113,8 +111,11 @@ The released model weights are provided in [**the parent folder**](../README.md)
   # - Uni-Perceiver
   wget https://github.com/czczup/ViT-Adapter/releases/download/v0.3.1/uni-perceiver-base-L12-H768-224size-torch-pretrained_converted.pth
   wget https://github.com/czczup/ViT-Adapter/releases/download/v0.3.1/uni-perceiver-large-L24-H1024-224size-pretrained_converted.pth
+
+  # For convnext weights, the following huggingface models will be downloaded automatically: facebook/convnext-base-224, facebook/convnext-small-224, facebook/convnext-tiny-224
+  # You can also download them manually
   ```
-- Prepare the COCO dataset according to the [MMDetection guidelines](https://github.com/open-mmlab/mmdetection/blob/master/docs/en/1_exist_data_model.md#prepare-datasets).
+10. Prepare the COCO dataset according to the [MMDetection guidelines](https://github.com/open-mmlab/mmdetection/blob/master/docs/en/1_exist_data_model.md#prepare-datasets), and ADE20K dataset according to the [MMSegmentation guidelines](https://github.com/open-mmlab/mmsegmentation/blob/main/docs/en/user_guides/2_dataset_prepare.md#ade20k).
 
 Note: the core model code is under `mmdet/models/backbones/`.
 
@@ -128,7 +129,9 @@ sh tools/dist_train.sh configs/piip/3branch/mask_rcnn_beit_tsb_1120_896_448_fpn_
 GPUS=8 sh tools/slurm_train.sh <partition> <job-name> configs/piip/3branch/mask_rcnn_beit_tsb_1120_896_448_fpn_1x_coco_bs16.py ./work_dir/
 ```
 
-**Note**: You can modify the `deepspeed` parameter in the configuration file to decide whether to use deepspeed. If you want to resume the deepspeed pretrained model for finetuning, you need to set `deepspeed_load_module_only=True` in the config.
+> [!Note]
+> You can modify the `deepspeed` parameter in the configuration file to decide whether to use deepspeed. 
+> If you want to resume the deepspeed pretrained model for finetuning, you need to set `deepspeed_load_module_only=True` in the config.
 
 ## Evaluation
 
@@ -220,7 +223,7 @@ To run object detection and instance segmentation with Mask R-CNN, use
 
 
 
-## FLOPs calculation
+## FLOPs Calculation
 
 We provide a simple script to calculate the number of FLOPs. Change the `config_list` in `get_flops_det.py` and run:
 
@@ -257,5 +260,12 @@ If you find this work helpful for your research, please consider giving this rep
   author={Zhu, Xizhou and Yang, Xue and Wang, Zhaokai and Li, Hao and Dou, Wenhan and Ge, Junqi and Lu, Lewei and Qiao, Yu and Dai, Jifeng},
   journal={arXiv preprint arXiv:2406.04330},
   year={2024}
+}
+
+@article{piip_v2,
+  title={Parameter-Inverted Image Pyramid Networks for Visual Perception and Multimodal Understanding},
+  author={Wang, Zhaokai and Zhu, Xizhou and Yang, Xue and Luo, Gen and Li, Hao and Tian, Changyao and Dou, Wenhan and Ge, Junqi and Lu, Lewei and Qiao, Yu and Dai, Jifeng},
+  journal={arXiv preprint arXiv:2501.07783},
+  year={2025}
 }
 ```

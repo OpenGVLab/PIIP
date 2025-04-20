@@ -8,19 +8,19 @@ The released model weights are provided in [**the parent folder**](../README.md)
 
 **Note:** environment for classification is different from the detection and segmentation environment.
 
-- Clone this repo:
+1. Clone this repo:
 
   ```bash
   git clone https://github.com/OpenGVLab/PIIP
   cd PIIP/
   ```
-- Create a conda virtual environment and activate it (Note: a separate env from the detection and segmentation env):
+2. Create a conda virtual environment and activate it (Note: a separate env from the detection and segmentation env):
 
   ```bash
   conda create -n piip_cls python=3.9 -y
   conda activate piip_cls
   ```
-- Install dependencies
+3. Install dependencies
 
   ```bash
   pip install torch==1.12.0 torchvision==0.13.0 --extra-index-url https://download.pytorch.org/whl/cu116
@@ -41,7 +41,7 @@ The released model weights are provided in [**the parent folder**](../README.md)
   cd csrc/fused_dense_lib
   pip install .
   ```
-- Download pretrained ViT weights from [DeiT](https://github.com/facebookresearch/deit/blob/main/README_deit.md) and [augreg](https://github.com/huggingface/pytorch-image-models/blob/main/timm/models/vision_transformer.py):
+4. Download pretrained ViT weights from [DeiT](https://github.com/facebookresearch/deit/blob/main/README_deit.md) and [augreg](https://github.com/huggingface/pytorch-image-models/blob/main/timm/models/vision_transformer.py):
 
   ```bash
   mkdir pretrained
@@ -59,7 +59,7 @@ The released model weights are provided in [**the parent folder**](../README.md)
   sh convert_augreg_models.sh
   ```
 
-## Data preparation
+## Data Preparation
 
 Download and extract ImageNet train and val images from http://image-net.org/.
 The directory structure is the standard layout for the torchvision [`datasets.ImageFolder`](https://pytorch.org/docs/stable/torchvision/datasets.html#imagefolder), and the training and validation data is expected to be in the `train/` folder and `val` folder respectively:
