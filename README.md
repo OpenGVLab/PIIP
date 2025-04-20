@@ -146,7 +146,28 @@ C: ConvNeXt. V: ViT (DeiT).
 
 ### Multimodal Understanding
 
-Will be released soon
+
+
+
+
+| Model                                         | Vision Encoder     | Resolution | #FLOPs | LLM        | Data | Download                                                     | MMB<sup>EN</sup> | MMVet | TextVQA | SQA<sup>I</sup> | GQA  | VQAv2 | SEED<sup>I</sup> | POPE | Avg  |
+| --------------------------------------------- | ------------------ | ---------- | ------ | ---------- | ---- | ------------------------------------------------------------ | ---------------- | ----- | ------- | --------------- | ---- | ----- | ---------------- | ---- | ---- |
+| LLaVA-1.5_7B                                  | CLIP-L             | 336        | 191G   | Vicuna-7B  | 1.2M | [ckpt](https://huggingface.co/liuhaotian/llava-v1.5-7b)      | 64.3             | 31.1  | 58.2    | 66.8            | 62.0 | 78.5  | 66.1             | 85.9 | 64.1 |
+| PIIP-LLaVA_CLIP-BL_512-256_7B                 | CLIP-B, CLIP-L     | 512/256    | 193G   | Vicuna-7B  | 1.2M | [ckpt](https://huggingface.co/OpenGVLab/PIIP-LLaVA_CLIP-BL_512-256_7B) \| [cfg](llava/configs/piip-llava_clip-bl_512-256_7B.py) | 63.8             | 32.0  | 57.9    | 68.8            | 62.8 | 79.1  | 67.3             | 86.5 | 64.8 |
+| PIIP-LLaVA_ConvNeXt-B_CLIP-L_640-224_7B       | ConvNeXt-B, CLIP-L | 640/224    | 191G   | Vicuna-7B  | 1.2M | [ckpt](https://huggingface.co/OpenGVLab/PIIP-LLaVA_ConvNeXt-B_CLIP-L_640-224_7B) \| [cfg](llava/configs/piip-llava_convnext-b_clip-l_640-224_7B.py) | 64.5             | 31.9  | 59.0    | 68.3            | 62.1 | 79.9  | 67.5             | 86.5 | 65.0 |
+| PIIP-LLaVA_CLIP-BL_512-448_7B                 | CLIP-B, CLIP-L     | 512/448    | 422G   | Vicuna-7B  | 1.2M | [ckpt](https://huggingface.co/OpenGVLab/PIIP-LLaVA_CLIP-BL_512-448_7B) \| [cfg](llava/configs/piip-llava_clip-bl_512-448_7B.py) | 66.2             | 30.5  | 59.5    | 68.0            | 63.7 | 80.3  | 69.0             | 87.3 | 65.6 |
+| PIIP-LLaVA_ConvNeXt-B_CLIP-L_1024-336_7B      | ConvNeXt-B, CLIP-L | 1024/336   | 598G   | Vicuna-7B  | 1.2M | [ckpt](https://huggingface.co/OpenGVLab/PIIP-LLaVA_ConvNeXt-B_CLIP-L_1024-336_7B) \| [cfg](llava/configs/piip-llava_convnext-b_clip-l_1024-336_7B.py) | 67.5             | 31.5  | 63.1    | 68.1            | 62.7 | 81.1  | 69.0             | 87.9 | 66.4 |
+| PIIP-LLaVA_ConvNeXt-L_CLIP-L_1024-336_7B      | ConvNeXt-L, CLIP-L | 1024/336   | 1037G  | Vicuna-7B  | 1.2M | [ckpt](https://huggingface.co/OpenGVLab/PIIP-LLaVA_ConvNeXt-L_CLIP-L_1024-336_7B) \| [cfg](llava/configs/piip-llava_convnext-l_clip-l_1024-336_7B.py) | 67.0             | 31.4  | 67.1    | 68.3            | 63.9 | 81.5  | 69.4             | 88.2 | 67.1 |
+| PIIP-LLaVA-Plus_ConvNeXt-L_CLIP-L_1024-336_7B | ConvNeXt-L, CLIP-L | 1024/336   | 1037G  | Vicuna-7B  | 2.7M | [ckpt](https://huggingface.co/OpenGVLab/PIIP-LLaVA-Plus_ConvNeXt-L_CLIP-L_1024-336_7B) \| [cfg](llava/configs/piip-llava-plus_convnext-l_clip-l_1024-336_7B.py) | 74.5             | 44.7  | 73.0    | 95.0            | 62.9 | 82.3  | 72.1             | 87.5 | 74.0 |
+|                                               |                    |            |        |            |      |                                                              |                  |       |         |                 |      |       |                  |      |      |
+| LLaVA-1.5_13B                                 | CLIP-L             | 336        | 191G   | Vicuna-13B | 1.2M | [ckpt](https://huggingface.co/liuhaotian/llava-v1.5-13b)     | 67.7             | 36.1  | 61.3    | 71.6            | 63.3 | 80.0  | 68.2             | 85.9 | 66.8 |
+| PIIP-LLaVA_CLIP-BL_512-448_13B                | CLIP-B, CLIP-L     | 512/448    | 422G   | Vicuna-13B | 1.2M | [ckpt](https://huggingface.co/OpenGVLab/PIIP-LLaVA_CLIP-BL_512-448_13B) \| [cfg](llava/configs/piip-llava_clip-bl_512-448_13B.py) | 67.6             | 36.1  | 61.6    | 71.0            | 64.5 | 81.2  | 69.5             | 87.2 | 67.3 |
+| PIIP-LLaVA_ConvNeXt-B_CLIP-L_1024-336_13B     | ConvNeXt-B, CLIP-L | 1024/336   | 598G   | Vicuna-13B | 1.2M | [ckpt](https://huggingface.co/OpenGVLab/PIIP-LLaVA_ConvNeXt-B_CLIP-L_1024-336_13B) \| [cfg](llava/configs/piip-llava_convnext-b_clip-l_1024-336_13B.py) | 68.5             | 37.7  | 64.2    | 71.1            | 64.2 | 81.8  | 69.3             | 87.9 | 68.0 |
+| PIIP-LLaVA_ConvNeXt-L_CLIP-L_1024-336_13B     | ConvNeXt-L, CLIP-L | 1024/336   | 1037G  | Vicuna-13B | 1.2M | [ckpt](https://huggingface.co/OpenGVLab/PIIP-LLaVA_ConvNeXt-L_CLIP-L_1024-336_13B) \| [cfg](llava/configs/piip-llava_convnext-l_clip-l_1024-336_13B.py) | 66.5             | 36.8  | 69.2    | 69.8            | 65.2 | 82.5  | 70.5             | 87.6 | 68.5 |
+
+
+
+
 
 
 
