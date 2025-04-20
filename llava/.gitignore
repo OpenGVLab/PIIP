@@ -1,0 +1,69 @@
+# Python
+__pycache__
+*.pyc
+*.egg-info
+dist
+
+# Log
+*.log
+*.log.*
+*.json
+*.jsonl
+
+# Data
+!**/alpaca-data-conversation.json
+
+# Editor
+.idea
+*.swp
+
+# Other
+.DS_Store
+wandb
+output
+
+checkpoints
+ckpts*
+
+.ipynb_checkpoints
+*.ipynb
+
+# DevContainer
+!.devcontainer/*
+
+# Demo
+serve_images/
+
+.idea/
+
+.DS_Store
+
+/pretrained
+/checkpoints/
+apex/
+docs/
+images/
+wandb/
+/work_dirs/
+/playground/
+LICENSE
+
+/eval_results/
+
+*.pth
+batch-script*
+
+llava/model/multimodal_encoder/piip/ops/build/
+llava/model/multimodal_encoder/piip/ops/dist/
+
+/vllm/
+/llava/data/*,txt
+
+!requirements.txt
+!/scripts/zero*.json
+/outputs
+/flagged
+
+/flops_output.log
+/flops_llava.txt
+/build/
