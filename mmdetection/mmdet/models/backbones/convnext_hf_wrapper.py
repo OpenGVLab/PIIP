@@ -42,7 +42,7 @@ class ConvNextLayerWrapper(nn.Module):
 class ConvNextHFWrapper(nn.Module):
     def __init__(self, pretrained, real_size, downsample_ratios=None, 
                  single_branch=False, with_simple_fpn=False, drop_path_rate=None,
-                 cal_flops_wo_fpn=False): # , cal_flops=False
+                 cal_flops=False):
         super().__init__()
         
         
@@ -83,7 +83,7 @@ class ConvNextHFWrapper(nn.Module):
         
         self.with_simple_fpn = with_simple_fpn
         self.single_branch = single_branch
-        self.cal_flops_wo_fpn = cal_flops_wo_fpn
+        self.cal_flops = cal_flops
         
         # if not cal_flops:
         if with_simple_fpn:
@@ -134,7 +134,7 @@ class ConvNextHFWrapper(nn.Module):
         last_hidden_state = encoder_outputs[0]
         hidden_states = encoder_outputs[1]
         
-        if self.cal_flops_wo_fpn:
+        if self.cal_flops:
             return
         
         if self.with_simple_fpn: 
