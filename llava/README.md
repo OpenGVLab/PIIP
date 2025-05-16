@@ -122,7 +122,7 @@ To evaluate PIIP or LLaVA-1.5 models on all benchmarks, change the `CHECKPOINT_P
 bash shell_scripts/eval.sh
 ```
 
-For MMBench, submit the result file in `eval_results/mmbench/` to [the evaluation server](https://opencompass.org.cn/leaderboard-multimodal).
+For MMBench, submit the result file in `eval_results/mmbench/` to [the evaluation server](https://mmbench.opencompass.org.cn/mmbench-submission).
 
 For MMVet, submit the result file in `eval_results/mm-vet/` to [the evaluation server](https://huggingface.co/spaces/whyu/MM-Vet_Evaluator) or use the official jupyter notebook.
 
