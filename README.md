@@ -176,10 +176,10 @@ C: ConvNeXt. V: ViT (DeiT).
 If you find this work helpful for your research, please consider giving this repo a star ⭐ and citing our paper:
 
 ```bibtex
-@article{piip,
+@inproceedings{piip,
   title={Parameter-Inverted Image Pyramid Networks},
   author={Zhu, Xizhou and Yang, Xue and Wang, Zhaokai and Li, Hao and Dou, Wenhan and Ge, Junqi and Lu, Lewei and Qiao, Yu and Dai, Jifeng},
-  journal={arXiv preprint arXiv:2406.04330},
+  booktitle={NeurIPS},
   year={2024}
 }
 
