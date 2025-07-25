@@ -1,23 +1,22 @@
 # <img src="imgs/invert_pyramid_v2.png" alt="pyramid" height="30"/> Parameter-Inverted Image Pyramid Networks (PIIP)
 
-[![PaperWithCode](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/parameter-inverted-image-pyramid-networks/semantic-segmentation-on-ade20k)](https://paperswithcode.com/sota/semantic-segmentation-on-ade20k?p=parameter-inverted-image-pyramid-networks) 	
-[![PaperWithCode](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/parameter-inverted-image-pyramid-networks/object-detection-on-coco)](https://paperswithcode.com/sota/object-detection-on-coco?p=parameter-inverted-image-pyramid-networks)
 
- [[📜 PIIP_v1 Paper]](https://arxiv.org/abs/2406.04330) [[📜 PIIP_v2 Paper]](https://arxiv.org/abs/2501.07783) [[🤗 Model]](https://huggingface.co/collections/OpenGVLab/piip-6804939a32e695f42cf3f227) [[📝 中文解读]](https://zhuanlan.zhihu.com/p/705734540) [[📑 Slides]](https://www.wzk.plus/slides/PIIP_slides.pdf) [[▶️ Video]](https://youtu.be/Kdh3CNp8bfg)
+ [[📚 PIIP v1 Paper]](https://arxiv.org/abs/2406.04330) [[📚 PIIP v2 Paper]](https://arxiv.org/abs/2501.07783) [[🤗 Model]](https://huggingface.co/collections/OpenGVLab/piip-6804939a32e695f42cf3f227) [[📝 中文解读]](https://zhuanlan.zhihu.com/p/705734540) [[📑 Slides]](https://www.wzk.plus/slides/PIIP_slides.pdf) [[▶️ Video]](https://youtu.be/Kdh3CNp8bfg)
 
 
 
 The official implementation of Parameter-Inverted Image Pyramid Networks.
 
-**NeurIPS 2024 Spotlight (Top 2.08%)**
+
+**NeurIPS 2024 Spotlight (Top 2.08%), TPAMI 2025**
 
 
 
 ## 📰 News
 
-[2025/4/20] [Code](https://github.com/OpenGVLab/PIIP/tree/main/llava) and [models](https://huggingface.co/collections/OpenGVLab/piip-6804939a32e695f42cf3f227) of PIIP-LLaVA are released!
+[2025/7/25] PIIP-LLaVA is accepted by **TPAMI 2025**!
 
-[2025/4/16] ConvNeXt-based detection models in [PIIP_v2](https://arxiv.org/abs/2501.07783) are released.
+[2025/4/20] [Code](https://github.com/OpenGVLab/PIIP/tree/main/llava) and [models](https://huggingface.co/collections/OpenGVLab/piip-6804939a32e695f42cf3f227) of PIIP-LLaVA and ConvNeXt-based detection models are released!
 
 [2025/1/15] We introduce **PIIP-LLaVA**, an MLLM that uses PIIP design to improve performance and save computational costs. We also extend PIIP to CNN-based structures and ViT-CNN hybrid structures. Code and models will be released soon. Check out our new **[paper](https://arxiv.org/abs/2501.07783)** for details.
 
@@ -61,10 +60,10 @@ Image pyramids are widely adopted in top-performing methods to obtain multi-scal
 
 For instructions on installation, pretrained models, training and evaluation, please refer to the readme files under each subfolder:
 
-- [mmdetection](mmdetection/README.md)
-- [mmsegmentation](mmsegmentation/README.md)
-- [classification](classification/README.md)
-- [llava](llava/README.md)
+- Object detection and instance segmentation: [mmdetection](mmdetection/README.md)
+- Semantic segmentation: [mmsegmentation](mmsegmentation/README.md)
+- Image classification: [classification](classification/README.md)
+- Multimodal understanding: [llava](llava/README.md)
 
 ## 🚀 Released Models
 
@@ -186,8 +185,9 @@ If you find this work helpful for your research, please consider giving this rep
 @article{piip_v2,
   title={Parameter-Inverted Image Pyramid Networks for Visual Perception and Multimodal Understanding},
   author={Wang, Zhaokai and Zhu, Xizhou and Yang, Xue and Luo, Gen and Li, Hao and Tian, Changyao and Dou, Wenhan and Ge, Junqi and Lu, Lewei and Qiao, Yu and Dai, Jifeng},
-  journal={arXiv preprint arXiv:2501.07783},
-  year={2025}
+  journal={IEEE transactions on pattern analysis and machine intelligence},
+  year={2025},
+  publisher={IEEE}
 }
 ```
 
