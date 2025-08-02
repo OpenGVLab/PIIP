@@ -8,9 +8,9 @@
 The official implementation of Parameter-Inverted Image Pyramid Networks.
 
 
-**NeurIPS 2024 Spotlight (Top 2.08%), TPAMI 2025**
+**NeurIPS 2024 Spotlight & TPAMI 2025**
 
-
+[Ranked Top 10 in NeurIPS 2024 (among 15671 submissions), Top 2 in Computer Vision Area](https://papercopilot.com/statistics/neurips-statistics/neurips-2024-statistics/)
 
 ## 📰 News
 
