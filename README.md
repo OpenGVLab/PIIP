@@ -14,7 +14,7 @@ The official implementation of Parameter-Inverted Image Pyramid Networks.
 
 ## 📰 News
 
-[2025/7/25] PIIP-LLaVA is accepted by **TPAMI 2025**!
+[2025/7/25] PIIP-LLaVA is accepted by [**TPAMI 2025**](https://ieeexplore.ieee.org/document/11098674)!
 
 [2025/4/20] [Code](https://github.com/OpenGVLab/PIIP/tree/main/llava) and [models](https://huggingface.co/collections/OpenGVLab/piip-6804939a32e695f42cf3f227) of PIIP-LLaVA and ConvNeXt-based detection models are released!
 
